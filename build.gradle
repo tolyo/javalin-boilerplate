@@ -25,5 +25,19 @@ test {
 }
 
 application {
-    mainClass = 'org.example.Main'
+    mainClass = 'Main'
 }
+
+// Frontend updates
+task copyFrontendFiles(type: Copy) {
+    from 'src/main/java' // Source directory containing your custom files
+    into 'build/classes/java/main' // Destination directory
+    include '**/*.html', '**/*.css' // Include specific file extensions
+}
+
+// Ensure resource processing on load
+run.dependsOn processResources
+
+run.dependsOn copyFrontendFiles
+build.dependsOn copyFrontendFiles
+jar.dependsOn copyFrontendFiles
