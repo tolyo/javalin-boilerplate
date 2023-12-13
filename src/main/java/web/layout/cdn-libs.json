@@ -1,0 +1,4 @@
+[
+  "https://unpkg.com/alpinejs@3.13.1/dist/cdn.min.js",
+  "https://cdn.jsdelivr.net/npm/@uirouter/core@6.1.0/_bundles/ui-router-core.min.js"
+]

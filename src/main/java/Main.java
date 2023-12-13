@@ -1,5 +1,7 @@
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
+import j2html.tags.specialized.FooterTag;
+import web.layout.Layout;
 
 import static j2html.TagCreator.*;
 
@@ -14,29 +16,11 @@ public class Main {
                 })
                 .get("/", ctx -> ctx.html(
                         html(
-                                header(
-                                        meta()
-                                                .attr("charset", "utf-8"),
-
-                                        meta()
-                                                .attr("name", "viewport")
-                                                .attr("content", "width=device-width, initial-scale=1, shrink-to-fit=no"),
-
-                                        meta()
-                                                .attr("name", "google")
-                                                .attr("content", "notranslate")
-                                ),
+                                Layout.header(),
                                 body(
                                         h1("Hello, world!")
                                 ),
-                                footer(
-                                        script().withCondAsync(true).withSrc("http://localhost:3000/browser-sync/browser-sync-client.js?v=2.27.10"),
-                                        script()
-                                                .attr("type", "module")
-                                                .attr("src", "/public/web/app.js")
-                                )
-
-
+                                Layout.footer()
                         ).renderFormatted()))
                 .start(4000);
     }
