@@ -12,9 +12,32 @@ public class Main {
                         staticFiles.location = Location.CLASSPATH;      // Location.CLASSPATH (jar) or Location.EXTERNAL (file system)
                     });
                 })
-                .get("/", ctx -> ctx.html(body(
-                        h1("Hello, world!")
-                ).renderFormatted()))
+                .get("/", ctx -> ctx.html(
+                        html(
+                                header(
+                                        meta()
+                                                .attr("charset", "utf-8"),
+
+                                        meta()
+                                                .attr("name", "viewport")
+                                                .attr("content", "width=device-width, initial-scale=1, shrink-to-fit=no"),
+
+                                        meta()
+                                                .attr("name", "google")
+                                                .attr("content", "notranslate")
+                                ),
+                                body(
+                                        h1("Hello, world!")
+                                ),
+                                footer(
+                                        script().withCondAsync(true).withSrc("http://localhost:3000/browser-sync/browser-sync-client.js?v=2.27.10"),
+                                        script()
+                                                .attr("type", "module")
+                                                .attr("src", "/public/web/app.js")
+                                )
+
+
+                        ).renderFormatted()))
                 .start(4000);
     }
 }
