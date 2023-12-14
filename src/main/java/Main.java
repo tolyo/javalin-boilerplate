@@ -1,7 +1,10 @@
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import j2html.tags.specialized.FooterTag;
+import j2html.tags.specialized.UlTag;
+import web.home.HomeController;
 import web.layout.Layout;
+import web.utils.components.UiView;
 
 import static j2html.TagCreator.*;
 
@@ -14,14 +17,8 @@ public class Main {
                         staticFiles.location = Location.CLASSPATH;      // Location.CLASSPATH (jar) or Location.EXTERNAL (file system)
                     });
                 })
-                .get("/", ctx -> ctx.html(
-                        html(
-                                Layout.header(),
-                                body(
-                                        h1("Hello, world!")
-                                ),
-                                Layout.footer()
-                        ).renderFormatted()))
+                .get("/_home", HomeController::get)
+                .get("/", ctx -> ctx.html(Layout.layout().render()))
                 .start(4000);
     }
 }

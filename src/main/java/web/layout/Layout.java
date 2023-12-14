@@ -3,6 +3,8 @@ package web.layout;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import j2html.tags.specialized.FooterTag;
 import j2html.tags.specialized.HeaderTag;
+import j2html.tags.specialized.HtmlTag;
+import web.utils.components.UiView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +14,14 @@ import static j2html.TagCreator.*;
 import static j2html.TagCreator.meta;
 
 public class Layout {
+
+    public static HtmlTag layout() throws IOException {
+        return html(
+                header(),
+                body(new UiView().withId("root")),
+                footer()
+        );
+    }
     public static HeaderTag header() throws IOException {
         return j2html.TagCreator.header(
                 meta()
