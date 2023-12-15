@@ -18,7 +18,6 @@ clean:
 
 setup:
 	$(FRONTEND_CONTEXT) setup
-	@echo $(INFO) "Installing MIX dependencies..."
 	$(SERVER_CONTEXT) setup
 	@echo $(INFO) "Complete. Run 'make start' to start server"
 	
