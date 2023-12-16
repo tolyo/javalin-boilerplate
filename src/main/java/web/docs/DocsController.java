@@ -8,7 +8,7 @@ import static web.utils.ViewHelpers.render;
 
 public class DocsController {
 
-    public static String GET = "/docs";
+    public static final String GET = "/docs";
 
     public static Context get(Context ctx) {
         return render(ctx,

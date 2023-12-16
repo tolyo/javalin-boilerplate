@@ -12,7 +12,7 @@ import static web.utils.components.Partial.partial;
 
 public class HomeController {
     public static final UiRouterMapping HOME = uiRoute("home", "/", "/_home");
-    public static UiRouterMapping SUBVIEW = uiRoute("home.subview", "/", "/_subview");
+    public static final UiRouterMapping SUBVIEW = uiRoute("home.subview", "/", "/_subview");
 
     public static Context home(Context ctx) {
         return render(ctx,
