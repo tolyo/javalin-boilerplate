@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static j2html.TagCreator.*;
-import static j2html.TagCreator.meta;
 
 public class Layout {
 
@@ -62,6 +61,7 @@ public class Layout {
                 )
         );
     }
+
     public static FooterTag footer() {
         return j2html.TagCreator.footer(
                 script().withCondAsync(true).withSrc("http://localhost:3000/browser-sync/browser-sync-client.js?v=2.27.10"),

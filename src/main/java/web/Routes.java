@@ -1,9 +1,6 @@
 package web;
 
 import io.javalin.Javalin;
-
-import static io.javalin.http.HandlerType.*;
-
 import web.demo.DemoController;
 import web.docs.DocsController;
 import web.home.HomeController;
@@ -11,6 +8,8 @@ import web.layout.Layout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.javalin.http.HandlerType.GET;
 
 
 public class Routes {
@@ -30,10 +29,10 @@ public class Routes {
 
     public static Javalin init(Javalin javalin) {
         routes.forEach(routeMapping ->
-            javalin.addHandler(
-                    routeMapping.method,
-                    routeMapping.url,
-                    routeMapping.handler)
+                javalin.addHandler(
+                        routeMapping.method,
+                        routeMapping.url,
+                        routeMapping.handler)
         );
         return javalin;
     }

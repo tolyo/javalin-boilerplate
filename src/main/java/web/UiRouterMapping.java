@@ -1,10 +1,11 @@
 package web;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
- *  name: "home",
- *  url: "/",
- *  serverPath: "/_home",
+ * name: "home",
+ * url: "/",
+ * serverPath: "/_home",
  */
 public class UiRouterMapping {
     public String name;
