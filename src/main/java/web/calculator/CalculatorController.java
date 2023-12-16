@@ -39,12 +39,11 @@ public class CalculatorController {
     public static Context post(Context ctx) {
         Request payload = ctx.bodyAsClass(Request.class);
         return render(ctx,
-                div(Integer.toString(payload.value1 + payload.value2))
+                div("Result " + (payload.value1 + payload.value2))
         );
     }
 
     static class Request {
-        public int value1;
-        public int value2;
+        public int value1, value2;
     }
 }
