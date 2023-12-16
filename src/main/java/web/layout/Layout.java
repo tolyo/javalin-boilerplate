@@ -2,6 +2,7 @@ package web.layout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
+import j2html.tags.DomContent;
 import j2html.tags.specialized.FooterTag;
 import j2html.tags.specialized.HeaderTag;
 import j2html.tags.specialized.HtmlTag;
@@ -17,21 +18,26 @@ import static j2html.TagCreator.meta;
 public class Layout {
 
     public static Context get(Context ctx) {
-        try {
-            return ctx.html(layout().render());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return ctx.html(layout().render());
     }
 
-    public static HtmlTag layout() throws IOException {
+    public static HtmlTag layout() {
         return html(
                 header(),
                 body(new UiView().withId("root")),
                 footer()
         );
     }
-    public static HeaderTag header() throws IOException {
+
+    public static String layout(DomContent body) {
+        return html(
+                header(),
+                body(body),
+                footer()
+        ).render();
+    }
+
+    public static HeaderTag header() {
         return j2html.TagCreator.header(
                 meta()
                         .attr("charset", "utf-8"),
@@ -57,10 +63,20 @@ public class Layout {
         );
     }
 
-    public static ArrayList<String> libs() throws IOException {
+    public static ArrayList<String> libs() {
         ObjectMapper objectMapper = new ObjectMapper();
         InputStream inputStream = Layout.class.getClassLoader().getResourceAsStream("web/layout/cdn-libs.json");
-        ArrayList<String> urlList = objectMapper.readValue(inputStream, ArrayList.class);
+        ArrayList<String> urlList = null;
+        try {
+            urlList = objectMapper.readValue(inputStream, ArrayList.class);
+        } catch (IOException e) {
+            throw new RuntimeException("cdn-libs.json not found in classpath");
+        }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return urlList;
     }
 }
