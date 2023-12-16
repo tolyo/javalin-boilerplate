@@ -14,4 +14,12 @@ public class RouteMapping {
         this.url = url;
         this.handler = handler;
     }
+
+    RouteMapping(@NotNull HandlerType method, @NotNull UiRouterRouteConfig routerRouteConfig, @NotNull Handler handler) {
+        this.method = method;
+        this.url = routerRouteConfig.serverPath;
+        this.handler = handler;
+        Routes.spaRoutes.add(routerRouteConfig);
+    }
 }
+

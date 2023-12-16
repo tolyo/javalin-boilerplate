@@ -21,22 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * @type {import("./utils/router.js").RouteConfig[]}
  */
-const routes = [
-  {
-    name: "home",
-    url: "/",
-    serverPath: "/_home",
-  },
-
-  {
-    name: "home.subview",
-    url: "/",
-    serverPath: "/_subview",
-  },
-].concat(getProductRoutes());
+const routes = window.routes.concat(getProductRoutes());
 
 /**
- * Enable router if `ui-view` tag is present. Otherwise fallback to default
+ * Enable router if `ui-view` tag is present. Otherwise, fallback to default
  * browser routing/navigation.
  */
 if (document.querySelector("ui-view") !== null) {
