@@ -29,12 +29,12 @@ public class Layout {
         );
     }
 
-    public static String layout(DomContent body) {
-        return html(
+    public static DomContent[] layout(DomContent body) {
+        return new DomContent[]{
                 header(),
                 body(body),
                 footer()
-        ).render();
+        };
     }
 
     public static HeaderTag header() {
