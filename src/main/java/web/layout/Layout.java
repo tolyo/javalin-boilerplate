@@ -1,6 +1,7 @@
 package web.layout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.http.Context;
 import j2html.tags.specialized.FooterTag;
 import j2html.tags.specialized.HeaderTag;
 import j2html.tags.specialized.HtmlTag;
@@ -14,6 +15,14 @@ import static j2html.TagCreator.*;
 import static j2html.TagCreator.meta;
 
 public class Layout {
+
+    public static Context get(Context ctx) {
+        try {
+            return ctx.html(layout().render());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static HtmlTag layout() throws IOException {
         return html(

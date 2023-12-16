@@ -6,4 +6,4 @@ start:
 	watchexec -r -w src/main \
 		--exts java,js,css,html \
 		-i '**/java/web/node_modules/**/*' \
-		-- ./gradlew run
+		--  ./gradlew run
