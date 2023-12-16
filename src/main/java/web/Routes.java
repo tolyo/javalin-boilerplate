@@ -11,20 +11,21 @@ import web.layout.Layout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class Routes {
     public static ArrayList<RouteMapping> routes = new ArrayList<>();
-    public static HashMap<Object, String> handlers = new HashMap();
+    static RouteMapping[] mappings = {
+            new RouteMapping(GET, "", Layout::get), // root component
+            new RouteMapping(GET, HomeController.GET, HomeController::get),
+            new RouteMapping(GET, HomeController.GET_SUBVIEW, HomeController::subview),
+            new RouteMapping(GET, DemoController.GET, DemoController::get),
+            new RouteMapping(GET, DocsController.GET, DocsController::get)
+    };
 
     static {
-        routes.add(new RouteMapping(GET, "", Layout::get));
-        routes.add(new RouteMapping(GET, HomeController.GET, HomeController::get));
-        routes.add(new RouteMapping(GET, DemoController.GET, DemoController::get));
-        routes.add(new RouteMapping(GET, DemoController.SUBVIEW, DemoController::subview));
-        routes.add(new RouteMapping(GET, DocsController.GET, DocsController::get));
-        routes.forEach(routeMapping -> handlers.put(routeMapping.handler, routeMapping.url));
-
+        List.of(mappings).forEach(route -> routes.add(route));
     }
 
     public static Javalin init(Javalin javalin) {

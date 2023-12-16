@@ -16,12 +16,22 @@ public class HomeController {
                         div(
                                 h1("Javalin Boilerplate"),
                                 div("A starter template"),
-                                partial("_subview"),
+                                partial(GET_SUBVIEW),
                                 section(
                                     a("Demo").withHref(DemoController.GET),
                                     a("Docs").withHref(DocsController.GET)
                                 )
                         ).attr("id", "home")
+                ).render()
+        );
+    }
+
+
+    public static String GET_SUBVIEW = "/_subview";
+    public static Context subview(Context ctx) {
+        return ctx.html(
+                html(
+                    div("for scalable development")
                 ).render()
         );
     }

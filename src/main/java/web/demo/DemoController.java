@@ -14,9 +14,4 @@ public class DemoController {
                 )
         );
     }
-
-    public static String SUBVIEW = "/_subview";
-    public static Context subview(Context ctx) {
-        return ctx.html(html(section("for scalable development")).render());
-    }
 }
