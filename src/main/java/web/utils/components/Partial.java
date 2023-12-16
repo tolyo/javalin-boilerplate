@@ -13,4 +13,8 @@ public class Partial extends ContainerTag<Partial> {
         this.withData("url", url);
     }
 
+    public static Partial partial(String url) {
+        return new Partial(url);
+    }
+
 }

@@ -3,10 +3,10 @@ package web.home;
 import io.javalin.http.Context;
 import web.demo.DemoController;
 import web.docs.DocsController;
-import web.utils.components.Partial;
 
 
 import static j2html.TagCreator.*;
+import static web.utils.components.Partial.partial;
 
 public class HomeController {
     public static final String GET = "/_home";
@@ -16,7 +16,7 @@ public class HomeController {
                         div(
                                 h1("Javalin Boilerplate"),
                                 div("A starter template"),
-                                new Partial("_subview"),
+                                partial("_subview"),
                                 section(
                                     a("Demo").withHref(DemoController.GET),
                                     a("Docs").withHref(DocsController.GET)
