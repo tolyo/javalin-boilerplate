@@ -29,10 +29,8 @@ public class HomeController {
     }
 
     public static Context subview(Context ctx) {
-        return ctx.html(
-                html(
-                        div("for scalable development")
-                ).render()
+        return render(ctx,
+                div("for scalable development")
         );
     }
 }
