@@ -1,6 +1,7 @@
 package web;
 
 import io.javalin.Javalin;
+import web.calculator.CalculatorController;
 import web.demo.DemoController;
 import web.docs.DocsController;
 import web.home.HomeController;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.javalin.http.HandlerType.GET;
+import static io.javalin.http.HandlerType.POST;
 
 
 public class Routes {
@@ -20,7 +22,9 @@ public class Routes {
             new RouteMapping(GET, HomeController.HOME, HomeController::home),
             new RouteMapping(GET, HomeController.SUBVIEW, HomeController::subview),
             new RouteMapping(GET, DemoController.GET, DemoController::get),
-            new RouteMapping(GET, DocsController.GET, DocsController::get)
+            new RouteMapping(GET, DocsController.GET, DocsController::get),
+            new RouteMapping(GET, CalculatorController.GET, CalculatorController::get),
+            new RouteMapping(POST, CalculatorController.POST, CalculatorController::post)
     };
 
     static {
