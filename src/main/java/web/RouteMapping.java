@@ -15,7 +15,7 @@ public class RouteMapping {
         this.handler = handler;
     }
 
-    RouteMapping(@NotNull HandlerType method, @NotNull UiRouterRouteConfig routerRouteConfig, @NotNull Handler handler) {
+    RouteMapping(@NotNull HandlerType method, @NotNull UiRouterMapping routerRouteConfig, @NotNull Handler handler) {
         this.method = method;
         this.url = routerRouteConfig.serverPath;
         this.handler = handler;

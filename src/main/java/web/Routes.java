@@ -1,7 +1,7 @@
 package web;
 
 import io.javalin.Javalin;
-import io.javalin.http.Handler;
+
 import static io.javalin.http.HandlerType.*;
 
 import web.demo.DemoController;
@@ -15,10 +15,10 @@ import java.util.List;
 
 public class Routes {
     public static ArrayList<RouteMapping> routes = new ArrayList<>();
-    public static ArrayList<UiRouterRouteConfig> spaRoutes = new ArrayList<>();
+    public static ArrayList<UiRouterMapping> spaRoutes = new ArrayList<>();
     static RouteMapping[] mappings = {
             new RouteMapping(GET, "", Layout::get), // root component
-            new RouteMapping(GET, HomeController.HOME, HomeController::get),
+            new RouteMapping(GET, HomeController.HOME, HomeController::home),
             new RouteMapping(GET, HomeController.SUBVIEW, HomeController::subview),
             new RouteMapping(GET, DemoController.GET, DemoController::get),
             new RouteMapping(GET, DocsController.GET, DocsController::get)

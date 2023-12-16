@@ -1,19 +1,19 @@
 package web.home;
 
 import io.javalin.http.Context;
-import web.UiRouterRouteConfig;
+import web.UiRouterMapping;
 import web.demo.DemoController;
 import web.docs.DocsController;
 
 
 import static j2html.TagCreator.*;
-import static web.UiRouterRouteConfig.spaRoute;
+import static web.UiRouterMapping.uiRoute;
 import static web.utils.components.Partial.partial;
 import static web.utils.ViewHelpers.render;
 
 public class HomeController {
-    public static final UiRouterRouteConfig HOME =  spaRoute("home", "/", "/_home");
-    public static Context get(Context ctx) {
+    public static final UiRouterMapping HOME =  uiRoute("home", "/", "/_home");
+    public static Context home(Context ctx) {
         return render(ctx,
             div(
                     h1("Javalin Boilerplate"),
@@ -28,7 +28,7 @@ public class HomeController {
     }
 
 
-    public static UiRouterRouteConfig SUBVIEW = spaRoute("home.subview", "/", "/_subview");;
+    public static UiRouterMapping SUBVIEW = uiRoute("home.subview", "/", "/_subview");;
     public static Context subview(Context ctx) {
         return ctx.html(
                 html(

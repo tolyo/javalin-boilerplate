@@ -2,14 +2,13 @@ package web.layout;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import io.javalin.http.Context;
 import j2html.tags.DomContent;
 import j2html.tags.specialized.FooterTag;
 import j2html.tags.specialized.HeaderTag;
 import j2html.tags.specialized.HtmlTag;
 import web.Routes;
-import web.UiRouterRouteConfig;
+import web.UiRouterMapping;
 import web.utils.components.UiView;
 
 import java.io.IOException;
@@ -57,6 +56,7 @@ public class Layout {
                 link().attr("rel", "stylesheet")
                         .attr("href", "/public/web/app.css"),
                 each(libs(), s -> script().withSrc(s)),
+                // Define ui-router routes
                 script(
                         "window.routes = " + convertToJsonArray(Routes.spaRoutes)
                 )
@@ -88,16 +88,12 @@ public class Layout {
         return urlList;
     }
 
-    private static String convertToJsonArray(List<UiRouterRouteConfig> routeMappings) {
+    private static String convertToJsonArray(List<UiRouterMapping> routeMappings) {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
         try {
-            // Convert the list to a JSON array
             return objectMapper.writeValueAsString(routeMappings);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return ""; // Handle the exception appropriately in your application
+            throw new RuntimeException(e);
         }
     }
 }
