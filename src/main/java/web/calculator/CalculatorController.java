@@ -7,16 +7,16 @@ import static j2html.TagCreator.*;
 import static web.utils.ViewHelpers.render;
 
 public class CalculatorController {
-    public static final String GET = "/calculator";
-    public static final String POST = "/calculator";
+    public static final String URL = "/calculator";
 
     public static Context get(Context ctx) {
         return render(ctx,
                 Layout.layout(
                         div(
                                 form()
-                                        .attr("data-action", POST)
+                                        .attr("data-action", URL)
                                         .attr("data-update", "#myDiv")
+                                        .attr("data-onchange", "true")
                                         .with(
                                                 label(
                                                         input().withName("value1")
@@ -44,6 +44,6 @@ public class CalculatorController {
     }
 
     static class Request {
-        public int value1, value2;
+        public long value1, value2;
     }
 }

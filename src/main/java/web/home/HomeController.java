@@ -21,8 +21,8 @@ public class HomeController {
                         div("A starter template"),
                         partial(SUBVIEW.serverPath),
                         section(
-                                a("Demo").withHref(DemoController.GET),
-                                a("Docs").withHref(DocsController.GET)
+                                a("Demo").withHref(DemoController.URL),
+                                a("Docs").withHref(DocsController.URL)
                         )
                 ).attr("id", "home")
         );

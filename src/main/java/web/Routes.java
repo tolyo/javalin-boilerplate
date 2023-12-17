@@ -21,10 +21,10 @@ public class Routes {
             new RouteMapping(GET, "", Layout::get), // root component
             new RouteMapping(GET, HomeController.HOME, HomeController::home),
             new RouteMapping(GET, HomeController.SUBVIEW, HomeController::subview),
-            new RouteMapping(GET, DemoController.GET, DemoController::get),
-            new RouteMapping(GET, DocsController.GET, DocsController::get),
-            new RouteMapping(GET, CalculatorController.GET, CalculatorController::get),
-            new RouteMapping(POST, CalculatorController.POST, CalculatorController::post)
+            new RouteMapping(GET, DemoController.URL, DemoController::get),
+            new RouteMapping(GET, DocsController.URL, DocsController::get),
+            new RouteMapping(GET, CalculatorController.URL, CalculatorController::get),
+            new RouteMapping(POST, CalculatorController.URL, CalculatorController::post)
     };
 
     static {

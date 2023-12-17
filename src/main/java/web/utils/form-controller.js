@@ -23,6 +23,8 @@ export default class FormController {
      */
     this.form = form;
 
+    this.reactive = false;
+
     if (!this.form) {
       throw new Error("Form required");
     }
@@ -32,6 +34,11 @@ export default class FormController {
       ev.preventDefault();
       this.submit();
     });
+
+    const { onchange } = this.form.dataset;
+    if (onchange) {
+      this.reactive = true;
+    }
 
     /**
      * @type {Object.<string, string>} - Data model to store form field values.
@@ -49,6 +56,9 @@ export default class FormController {
           this.dataModel[i.name] = i.value;
           // Clear all error messages
           this.clearAllMessages();
+          if (this.reactive) {
+            this.submit();
+          }
         });
       }
 
