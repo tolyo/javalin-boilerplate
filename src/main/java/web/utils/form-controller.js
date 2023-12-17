@@ -69,6 +69,9 @@ export default class FormController {
           this.dataModel[i.name] = i.value;
           // Clear all error messages
           this.clearAllMessages();
+          if (this.reactive) {
+            this.submit();
+          }
         });
       }
     });

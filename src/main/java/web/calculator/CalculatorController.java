@@ -3,6 +3,8 @@ package web.calculator;
 import io.javalin.http.Context;
 import web.layout.Layout;
 
+import java.math.BigInteger;
+
 import static j2html.TagCreator.*;
 import static web.utils.ViewHelpers.render;
 
@@ -20,11 +22,11 @@ public class CalculatorController {
                                         .with(
                                                 label(
                                                         input().withName("value1")
-                                                                .withType("integer").withValue("0")
+                                                                .withType("number").withValue("0")
                                                 ),
                                                 label(
                                                         input().withName("value2")
-                                                                .withType("integer").withValue("0")
+                                                                .withType("number").withValue("0")
                                                 )
                                         ),
 
@@ -38,11 +40,11 @@ public class CalculatorController {
     public static Context post(Context ctx) {
         Request payload = ctx.bodyAsClass(Request.class);
         return render(ctx,
-                div("Result " + (payload.value1 + payload.value2))
+                div("Result " + (payload.value1.add(payload.value2)))
         );
     }
 
     static class Request {
-        public long value1, value2;
+        public BigInteger value1, value2;
     }
 }
