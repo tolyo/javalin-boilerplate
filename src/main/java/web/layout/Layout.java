@@ -26,22 +26,25 @@ public class Layout {
 
     public static HtmlTag layout() {
         return html(
-                header(),
-                body(new UiView().withId("root")),
+                head(),
+                body(
+                    header(),
+                        new UiView().withId("root")),
                 footer()
         );
     }
 
-    public static DomContent[] layout(DomContent body) {
+    public static DomContent[] layout(DomContent content) {
         return new DomContent[]{
-                header(),
-                body(body),
+                head(),
+                body(
+                        header(), content),
                 footer()
         };
     }
 
-    public static HeaderTag header() {
-        return j2html.TagCreator.header(
+    public static DomContent head() {
+        return j2html.TagCreator.head(
                 meta()
                         .attr("charset", "utf-8"),
 
@@ -61,6 +64,17 @@ public class Layout {
                 )
         );
     }
+
+    public static DomContent header() {
+        return j2html.TagCreator.header(
+                nav(
+                        a(
+                                strong("SCALE APP")
+                        ).withHref("/")
+                )
+        );
+    }
+
 
     public static FooterTag footer() {
         return j2html.TagCreator.footer(

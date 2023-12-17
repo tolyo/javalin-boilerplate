@@ -146,7 +146,7 @@ export default class FormController {
   onError(res) {
     this.res = res;
     this.clearAllMessages();
-    res.json().then((err) => {
+    this.res.json().then((err) => {
       Object.keys(err).forEach((x) => {
         const input = this.form.elements[x];
         input.setAttribute("aria-invalid", "true");

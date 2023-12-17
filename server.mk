@@ -7,3 +7,6 @@ start:
 		--exts java,js,css,html \
 		-i '**/java/web/node_modules/**/*' \
 		--  ./gradlew run
+
+functional-test:
+	make start
