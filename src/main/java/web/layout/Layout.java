@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import j2html.tags.DomContent;
 import j2html.tags.specialized.FooterTag;
-import j2html.tags.specialized.HeaderTag;
 import j2html.tags.specialized.HtmlTag;
+import org.jetbrains.annotations.NotNull;
 import web.Routes;
-import web.UiRouterMapping;
+import web.utils.UiRouterMapping;
 import web.utils.components.UiView;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class Layout {
         );
     }
 
-    public static DomContent[] layout(DomContent content) {
+    public static DomContent[] layout(@NotNull DomContent content) {
         return new DomContent[]{
                 head(),
                 body(

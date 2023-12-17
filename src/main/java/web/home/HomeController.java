@@ -1,12 +1,12 @@
 package web.home;
 
 import io.javalin.http.Context;
-import web.UiRouterMapping;
+import web.utils.UiRouterMapping;
 import web.demo.DemoController;
 import web.docs.DocsController;
 
 import static j2html.TagCreator.*;
-import static web.UiRouterMapping.uiRoute;
+import static web.utils.UiRouterMapping.uiRoute;
 import static web.utils.ViewHelpers.render;
 import static web.utils.components.Partial.partial;
 

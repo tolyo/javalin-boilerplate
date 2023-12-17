@@ -1,4 +1,4 @@
-package web;
+package web.utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ public class UiRouterMapping {
     public String url;
     public String serverPath;
 
-    UiRouterMapping(@NotNull String name, @NotNull String url, @NotNull String serverPath) {
+    public UiRouterMapping(@NotNull String name, @NotNull String url, @NotNull String serverPath) {
         this.name = name;
         this.url = url;
         this.serverPath = serverPath;
