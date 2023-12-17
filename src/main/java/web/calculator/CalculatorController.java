@@ -25,8 +25,7 @@ public class CalculatorController {
                                                 label(
                                                         input().withName("value2")
                                                                 .withType("integer").withValue("0")
-                                                ),
-                                                button("Add")
+                                                )
                                         ),
 
                                 div(attrs("#myDiv"))
