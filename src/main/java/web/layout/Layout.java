@@ -85,7 +85,7 @@ public class Layout {
         );
     }
 
-    public static ArrayList<String> libs() {
+    public static List<String> libs() {
         ObjectMapper objectMapper = new ObjectMapper();
         InputStream inputStream = Layout.class.getClassLoader().getResourceAsStream("web/layout/cdn-libs.json");
         ArrayList<String> urlList = null;

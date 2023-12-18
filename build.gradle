@@ -1,6 +1,7 @@
 plugins {
     id 'application'
     id 'java'
+    id("net.ltgt.errorprone") version "3.1.0" // error prone plugin
 }
 
 apply plugin : "java"
@@ -19,6 +20,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.1")
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    errorprone("com.google.errorprone:error_prone_core:2.+")
 }
 
 test {
@@ -27,6 +29,12 @@ test {
 
 application {
     mainClass = 'Main'
+}
+
+tasks {
+    compileTestJava {
+        options.errorprone.enabled = true
+    }
 }
 
 // Frontend updates
