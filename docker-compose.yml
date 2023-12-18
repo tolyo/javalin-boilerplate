@@ -1,0 +1,23 @@
+version: "3.8"
+
+x-common-variables: &common-variables
+  POSTGRES_DB: default_db
+  POSTGRES_TEST_DB: default_test_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_PORT: 5432
+  POSTGRES_HOST: db
+
+volumes:
+  postgres-storage:
+services:
+  db:
+    container_name: java_db
+    image: postgres:16.0
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment: *common-variables
+    restart: unless-stopped

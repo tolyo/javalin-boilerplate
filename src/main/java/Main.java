@@ -1,11 +1,18 @@
+import app.db.Db;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
+import java.sql.SQLException;
 import web.Routes;
 
 @SuppressWarnings("DefaultPackage")
 public class Main {
 
   public static void main(String[] args) {
+    try {
+      Db.init();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     Javalin javalin =
         Javalin.create(
             config -> {
