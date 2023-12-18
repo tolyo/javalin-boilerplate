@@ -4,8 +4,7 @@ import j2html.tags.ContainerTag;
 
 public class UiView extends ContainerTag<UiView> {
 
-    public UiView() {
-        super("ui-view");
-    }
-
+  public UiView() {
+    super("ui-view");
+  }
 }

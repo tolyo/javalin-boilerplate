@@ -2,6 +2,7 @@ plugins {
     id 'application'
     id 'java'
     id("net.ltgt.errorprone") version "3.1.0" // error prone plugin
+    id("com.diffplug.spotless") version "6.23.3" // spotless
 }
 
 apply plugin : "java"
@@ -50,3 +51,10 @@ run.dependsOn processResources
 run.dependsOn copyFrontendFiles
 build.dependsOn copyFrontendFiles
 jar.dependsOn copyFrontendFiles
+
+// Linter
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}

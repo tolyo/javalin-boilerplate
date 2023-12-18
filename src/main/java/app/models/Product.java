@@ -1,4 +1,3 @@
 package app.models;
 
-public class Product {
-}
+public class Product {}

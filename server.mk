@@ -8,5 +8,8 @@ start:
 		-i '**/java/web/node_modules/**/*' \
 		--  ./gradlew run
 
+lint:
+	./gradlew task spotlessApply
+
 functional-test:
 	make start

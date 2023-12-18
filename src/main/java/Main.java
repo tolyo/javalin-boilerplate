@@ -4,15 +4,19 @@ import web.Routes;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Javalin javalin = Javalin.create(config -> {
-            config.staticFiles.add(staticFiles -> {
-                staticFiles.hostedPath = "/public";                   // change to host files on a subpath, like '/assets'
-                staticFiles.directory = "/";                    // the directory where your files are located
-                staticFiles.location = Location.CLASSPATH;      // Location.CLASSPATH (jar) or Location.EXTERNAL (file system)
+  public static void main(String[] args) {
+    Javalin javalin =
+        Javalin.create(
+            config -> {
+              config.staticFiles.add(
+                  staticFiles -> {
+                    staticFiles.hostedPath =
+                        "/public"; // change to host files on a subpath, like '/assets'
+                    staticFiles.directory = "/"; // the directory where your files are located
+                    staticFiles.location = Location.CLASSPATH;
+                  });
             });
-        });
 
-        Routes.init(javalin).start(4000);
-    }
+    Routes.init(javalin).start(4000);
+  }
 }
