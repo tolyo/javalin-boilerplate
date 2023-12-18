@@ -27,8 +27,8 @@ public class Layout {
     return html(head(), body(header(), new UiView().withId("root")), footer());
   }
 
-  public static DomContent[] layout(@NotNull DomContent content) {
-    return new DomContent[] {head(), body(header(), content), footer()};
+  public static HtmlTag layout(@NotNull DomContent content) {
+    return html(head(), body(header(), content), footer());
   }
 
   public static DomContent head() {
