@@ -2,6 +2,7 @@ import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import web.Routes;
 
+@SuppressWarnings("DefaultPackage")
 public class Main {
 
   public static void main(String[] args) {
