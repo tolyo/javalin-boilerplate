@@ -1,5 +1,6 @@
 package app.db;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import app.models.Product;
