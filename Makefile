@@ -58,7 +58,7 @@ check:
 
 .PHONY: test
 test:
-	MIX_ENV=test mix test test/ lib/
+	$(SERVER_CONTEXT) test
 
 functional-test:
 	$(SERVER_CONTEXT) functional-test &

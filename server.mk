@@ -12,5 +12,8 @@ start:
 lint:
 	./gradlew task spotlessApply
 
+test:
+	./gradlew check
+
 functional-test:
 	make start
