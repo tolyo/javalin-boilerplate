@@ -11,6 +11,7 @@ start:
 		--  ./gradlew run & \
 	watchexec -r -w src/main \
     		--exts js,css,html \
+    		-i '**/java/app/**/*' \
     		-i '**/java/web/node_modules/**/*' \
     		--  ./gradlew task copyFrontendFiles
 lint:

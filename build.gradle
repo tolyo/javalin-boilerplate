@@ -43,7 +43,8 @@ tasks {
 task copyFrontendFiles(type: Copy) {
     from 'src/main/java' // Source directory containing your custom files
     into 'build/classes/java/main' // Destination directory
-    include '**/*.html', '**/*.css', '**/*.js', '**/*.json' // Include specific file extensions
+    include '**/*.html', '**/*.css', '**/*.js', '**/cdn-libs.json' // Include specific file extensions
+    exclude '**/node_modules', "**/playwright-report", "**/test-results", '**/.eslintrc.js', '**/*.json', '**/playwright.config.js'
 }
 
 run.dependsOn copyFrontendFiles
