@@ -7,12 +7,8 @@ import web.Routes;
 @SuppressWarnings("DefaultPackage")
 public class Main {
 
-  public static void main(String[] args) {
-    try {
-      Db.init();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+  public static void main(String[] args) throws SQLException {
+    Db.init();
     Javalin javalin =
         Javalin.create(
             config -> {

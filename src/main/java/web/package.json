@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "browsersync": "browser-sync start --files './' --ignore './node_modules' --reload-delay 1000",
+    "browsersync": "browser-sync start --files './' --ignore './node_modules' --no-inject-changes --reload-delay 500",
     "typecheck": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/eslint ./ --fix",
     "format": "./node_modules/.bin/prettier ./ --write",
