@@ -8,6 +8,8 @@ public class Product {
   public Integer amount;
   public BigDecimal price;
 
+  public Product() {}
+
   public Product(String title, String imageUrl, Integer amount, BigDecimal price) {
     this.title = title;
     this.imageUrl = imageUrl;

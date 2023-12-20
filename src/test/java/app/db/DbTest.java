@@ -1,11 +1,11 @@
 package app.db;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import app.models.Product;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,8 @@ public class DbTest {
   @BeforeAll
   static void setUp() throws SQLException {
     Db.init();
+    // TODO create a temp 'foo' table with a sample Foo class just for this test to separate it away
+    // from 'products'
   }
 
   @AfterAll
@@ -24,10 +26,10 @@ public class DbTest {
   }
 
   @Test
-  void testQueryValNoResult() {
-    String result = Db.queryVal("SELECT title FROM products WHERE amount = 0.00");
+  void testQueryValNoResult() throws SQLException {
+    Optional result = Db.queryVal(String.class, "SELECT title FROM products WHERE amount = 0.00");
     // Verify the result
-    assertNull(result);
+    assertTrue(result.isEmpty());
   }
 
   @Test
@@ -35,5 +37,22 @@ public class DbTest {
     String res =
         Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
     assertNotNull(res);
+  }
+
+  @Test
+  void testQueryValResult() throws SQLException, IllegalAccessException {
+    Product example = new Product("testQueryValResult", "test.com", 1, BigDecimal.valueOf(100.00));
+    String res = Db.create("products", example);
+    assertNotNull(res);
+
+    Product product =
+        Db.queryVal(Product.class, "SELECT * FROM products WHERE id = ?", Integer.valueOf(res))
+            .get();
+
+    assertNotNull(product);
+    assertEquals(product.title, example.title);
+    assertEquals(product.imageUrl, example.imageUrl);
+    assertEquals(product.price, example.price);
+    assertEquals(product.amount, example.amount);
   }
 }
