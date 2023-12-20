@@ -6,9 +6,13 @@ setup:
 
 start:
 	watchexec -r -w src/main \
-		--exts java,js,css,html \
+		--exts java \
 		-i '**/java/web/node_modules/**/*' \
-		--  ./gradlew run
+		--  ./gradlew run & \
+	watchexec -r -w src/main \
+    		--exts js,css,html \
+    		-i '**/java/web/node_modules/**/*' \
+    		--  ./gradlew task copyFrontendFiles
 lint:
 	./gradlew task spotlessApply
 
