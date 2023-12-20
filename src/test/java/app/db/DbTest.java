@@ -21,14 +21,13 @@ public class DbTest {
 
   @AfterAll
   static void tearDown() throws SQLException {
-    // Close the database connection
     Db.close();
   }
 
   @Test
   void testQueryValNoResult() throws SQLException {
     Optional result = Db.queryVal(String.class, "SELECT title FROM products WHERE amount = 0.00");
-    // Verify the result
+
     assertTrue(result.isEmpty());
   }
 
@@ -43,6 +42,7 @@ public class DbTest {
   void testQueryValResult() throws SQLException, IllegalAccessException {
     Product example = new Product("testQueryValResult", "test.com", 1, BigDecimal.valueOf(100.00));
     String res = Db.create("products", example);
+
     assertNotNull(res);
 
     Product product =

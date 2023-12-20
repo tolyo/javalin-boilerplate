@@ -29,6 +29,23 @@ public class Db {
     }
   }
 
+  /**
+   * Executes a SQL query and maps the result to an instance of the specified type.
+   *
+   * <p>The method uses the provided SQL query, along with any optional arguments, to execute a
+   * query on the database. It then maps the result set to an object of the specified type.
+   *
+   * <p>If the query result contains more entries than the fields in the specified type, additional
+   * entries are ignored, allowing usage of '*' wildcards in SQL queries;
+   *
+   * @param type The class representing the type to which the query result should be mapped.
+   * @param query The SQL query to be executed.
+   * @param args Optional arguments to be used in the SQL query.
+   * @param <T> The type to which the query result should be mapped.
+   * @return An Optional containing the mapped object if the query result is not empty, or an empty
+   *     Optional otherwise.
+   * @throws SQLException If a database access error occurs.
+   */
   public static <T> Optional<T> queryVal(Class<T> type, String query, Object... args)
       throws SQLException {
     try (PreparedStatement statement = conn.prepareStatement(query)) {
@@ -90,79 +107,6 @@ public class Db {
     }
   }
 
-  //
-  //  // Execute a query and return a single value
-  //  public static <T> T queryVal(String query, Object... args) {
-  //    Map<String, Object> res = new HashMap<>();
-  //    try {
-  //      PreparedStatement statement = conn.prepareStatement(query);
-  //      if (args != null) {
-  //        setStatementArguments(statement, args);
-  //      }
-  //      ResultSet resultSet = statement.executeQuery();
-  //      ResultSetMetaData metaData = resultSet.getMetaData();
-  //      int columnCount = metaData.getColumnCount();
-  //      String[] columnNames = new String[columnCount];
-  //      for (int i = 1; i <= columnCount; i++) {
-  //        columnNames[i - 1] = metaData.getColumnName(i);
-  //      }
-  //
-  //      while (resultSet.next()) {
-  //        for (int i = 1; i <= columnCount; i++) {
-  //          res.put(columnNames[i-1], resultSet.getObject(i));
-  //        }
-  //      }
-  //    } catch (SQLException e) {
-  //      e.printStackTrace();
-  //    }
-  //    return val;
-  //  }
-  //
-  //  // Execute a query and return a list of values
-  //  public static <T> List<T> queryList(String query, Object... args) {
-  //    List<T> resultList = new ArrayList<>();
-  //    try {
-  //      PreparedStatement statement = conn.prepareStatement(query);
-  //      int index = 1;
-  //      for (Object i : args) {
-  //        addCastedValue(statement, index, i);
-  //        index++;
-  //      }
-  //      ResultSet resultSet = statement.executeQuery();
-  //      while (resultSet.next()) {
-  //        T item = (T) resultSet.getObject(1);
-  //        resultList.add(item);
-  //      }
-  //    } catch (SQLException e) {
-  //      e.printStackTrace();
-  //    }
-  //    return resultList;
-  //  }
-  //
-  //  // Get the count of rows in a table
-  //  public static int getCount(String tableName) {
-  //    return queryVal("SELECT COUNT(*) FROM " + tableName);
-  //  }
-  //
-  //  // Delete all rows from a table
-  //  public static void deleteAll(String tableName) throws SQLException {
-  //    PreparedStatement statement = conn.prepareStatement("DELETE FROM " + tableName);
-  //    statement.executeUpdate();
-  //  }
-  //
-  //  // Set arguments for a prepared statement
-  //  private static void setStatementArguments(PreparedStatement statement, Object... args)
-  //      throws SQLException {
-  //    for (int i = 0; i < args.length; i++) {
-  //      statement.setObject(i + 1, args[i]);
-  //    }
-  //  }
-  //
-  //  public static <T> List<T> list(String tableName) {
-  //    List<T> res = queryList("SELECT * FROM " + tableName);
-  //    return res;
-  //  }
-  //
   public static String create(String tableName, Object model)
       throws SQLException, IllegalAccessException {
     Field[] fields = model.getClass().getDeclaredFields();
@@ -187,7 +131,7 @@ public class Db {
     if (resultSet.next()) {
       return resultSet.getString(1);
     } else {
-      return null;
+      throw new IllegalArgumentException("Unable to create new entry");
     }
   }
 
@@ -206,25 +150,6 @@ public class Db {
     }
   }
 
-  //  private static <T> Map<String, Object> convertObjectToMap(T obj) {
-  //    Map<String, Object> params = new HashMap<>();
-  //
-  //    try {
-  //      Class<?> clazz = obj.getClass();
-  //      Field[] fields = clazz.getDeclaredFields();
-  //
-  //      for (Field field : fields) {
-  //        field.setAccessible(true);
-  //        params.put(field.getName(), field.get(obj));
-  //      }
-  //    } catch (IllegalAccessException e) {
-  //      e.printStackTrace();
-  //    }
-  //
-  //    return params;
-  //  }
-
-  // Convert field names to snake_case
   private static String toSnakeCase(String input) {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < input.length(); i++) {
