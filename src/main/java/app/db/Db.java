@@ -51,42 +51,46 @@ public class Db {
     try (PreparedStatement statement = conn.prepareStatement(query)) {
       setParameters(statement, args);
       try (ResultSet resultSet = statement.executeQuery()) {
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        String[] columnNames = new String[columnCount];
-        for (int i = 1; i <= columnCount; i++) {
-          columnNames[i - 1] = toCamelCase(metaData.getColumnName(i));
-        }
-        T val;
-        Map<String, Object> res = new HashMap<>();
-        if (resultSet.next()) {
-          for (int i = 1; i <= columnCount; i++) {
-            res.put(columnNames[i - 1], resultSet.getObject(i));
-          }
-          ObjectMapper objectMapper = new ObjectMapper();
-          objectMapper.configure(
-              com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-              false);
-          val = objectMapper.convertValue(res, type);
-          return Optional.of(val);
-        }
+        return resultSet.next()
+            ? Optional.of(mapResultSetToType(resultSet, type))
+            : Optional.empty();
       }
     }
-    return Optional.empty();
   }
 
-  public static <T> List<T> queryList(Class<T> type, String query, Object... args)
-      throws SQLException {
+  public static <T> List<T> queryList(Class<T> type, String query, Object... args) {
     List<T> result = new ArrayList<>();
     try (PreparedStatement statement = conn.prepareStatement(query)) {
       setParameters(statement, args);
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
-          result.add(resultSet.getObject(1, type));
+          result.add(mapResultSetToType(resultSet, type));
         }
       }
+    } catch (SQLException e) {
+      return result;
     }
     return result;
+  }
+
+  private static <T> T mapResultSetToType(ResultSet resultSet, Class<T> type) throws SQLException {
+    ResultSetMetaData metaData = resultSet.getMetaData();
+    int columnCount = metaData.getColumnCount();
+    String[] columnNames = new String[columnCount];
+    for (int i = 1; i <= columnCount; i++) {
+      columnNames[i - 1] = toCamelCase(metaData.getColumnName(i));
+    }
+
+    Map<String, Object> res = new HashMap<>();
+    for (int i = 1; i <= columnCount; i++) {
+      res.put(columnNames[i - 1], resultSet.getObject(i));
+    }
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(
+        com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    return objectMapper.convertValue(res, type);
   }
 
   public static Optional<Integer> getCount(Connection conn, String tableName)

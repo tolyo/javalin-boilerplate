@@ -1,25 +1,31 @@
 package web.product;
 
-import io.javalin.apibuilder.CrudHandler;
+import static j2html.TagCreator.*;
+import static web.utils.ViewHelpers.render;
+
+import app.db.Db;
+import app.models.Product;
 import io.javalin.http.Context;
+import j2html.tags.DomContent;
 import org.jetbrains.annotations.NotNull;
 
-public class ProductController implements CrudHandler {
-  @Override
-  public void create(@NotNull Context context) {}
+public class ProductController {
 
-  @Override
-  public void delete(@NotNull Context context, @NotNull String s) {}
+  public static void create(@NotNull Context ctx) {}
 
-  @Override
-  public void getAll(@NotNull Context context) {
-    //        List<Product> productList = Db.list("products");
+  public static void delete(@NotNull Context ctx, @NotNull String s) {}
 
+  public static Context getAll(@NotNull Context ctx) {
+
+    return render(
+        ctx,
+        ul(
+            Db.queryList(Product.class, "SELECT * FROM products").stream()
+                .map(p -> li(p.title))
+                .toArray(DomContent[]::new)));
   }
 
-  @Override
-  public void getOne(@NotNull Context context, @NotNull String s) {}
+  public static void getOne(@NotNull Context ctx, @NotNull String s) {}
 
-  @Override
-  public void update(@NotNull Context context, @NotNull String s) {}
+  public static void update(@NotNull Context ctx, @NotNull String s) {}
 }

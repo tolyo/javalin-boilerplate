@@ -11,6 +11,7 @@ import web.demo.DemoController;
 import web.docs.DocsController;
 import web.home.HomeController;
 import web.layout.Layout;
+import web.product.ProductController;
 import web.utils.RouteMapping;
 import web.utils.UiRouterMapping;
 
@@ -24,7 +25,8 @@ public class Routes {
     new RouteMapping(GET, DemoController.URL, DemoController::get),
     new RouteMapping(GET, DocsController.URL, DocsController::get),
     new RouteMapping(GET, CalculatorController.URL, CalculatorController::get),
-    new RouteMapping(POST, CalculatorController.URL, CalculatorController::post)
+    new RouteMapping(POST, CalculatorController.URL, CalculatorController::post),
+    new RouteMapping(GET, "/products", ProductController::getAll)
   };
 
   static {

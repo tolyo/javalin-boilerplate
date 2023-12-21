@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import app.models.Product;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,7 @@ public class DbTest {
 
   @Test
   void testQueryValResult() throws SQLException, IllegalAccessException {
-    Product example = new Product("testQueryValResult", "test.com", 1, BigDecimal.valueOf(100.00));
+    Product example = createRandomProduct();
     String res = Db.create("products", example);
 
     assertNotNull(res);
@@ -54,5 +56,22 @@ public class DbTest {
     assertEquals(product.imageUrl, example.imageUrl);
     assertEquals(product.price, example.price);
     assertEquals(product.amount, example.amount);
+  }
+
+  private Product createRandomProduct() {
+    return new Product(
+        String.valueOf(new Random().nextInt()), "test.com", 1, BigDecimal.valueOf(100.00));
+  }
+
+  @Test
+  void testqueryList() throws SQLException, IllegalAccessException {
+    Db.create("products", createRandomProduct());
+    Db.create("products", createRandomProduct());
+    Db.create("products", createRandomProduct());
+
+    List<Product> products = Db.queryList(Product.class, "SELECT * FROM products");
+
+    assertNotNull(products);
+    assertTrue(products.size() >= 3);
   }
 }
