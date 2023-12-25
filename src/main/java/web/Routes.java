@@ -26,7 +26,8 @@ public class Routes {
     new RouteMapping(GET, DocsController.URL, DocsController::get),
     new RouteMapping(GET, CalculatorController.URL, CalculatorController::get),
     new RouteMapping(POST, CalculatorController.URL, CalculatorController::post),
-    new RouteMapping(GET, "/products", Layout::get),
+    new RouteMapping(GET, "/_products/{id}", ProductController::getOne),
+    new RouteMapping(GET, "/products**", Layout::get),
     new RouteMapping(GET, "/_products", ProductController::getAll)
   };
 
