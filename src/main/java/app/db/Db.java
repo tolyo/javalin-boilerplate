@@ -113,7 +113,10 @@ public class Db {
 
   public static String create(String tableName, Object model)
       throws SQLException, IllegalAccessException {
-    Field[] fields = model.getClass().getDeclaredFields();
+    Field[] fields =
+        Arrays.stream(model.getClass().getDeclaredFields())
+            .filter(field -> !"id".equals(field.getName()))
+            .toArray(Field[]::new);
     String query =
         String.format(
             "INSERT INTO %s (%s) VALUES (%s) RETURNING ID",
@@ -150,7 +153,7 @@ public class Db {
     } else if (value instanceof BigDecimal) {
       preparedStatement.setBigDecimal(index, (BigDecimal) value);
     } else {
-      throw new RuntimeException("Unknown field type");
+      throw new RuntimeException("Unknown field type " + value.toString());
     }
   }
 
