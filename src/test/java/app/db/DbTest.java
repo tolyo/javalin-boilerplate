@@ -34,13 +34,6 @@ public class DbTest {
   }
 
   @Test
-  void testInsert() throws SQLException, IllegalAccessException {
-    String res =
-        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
-    assertNotNull(res);
-  }
-
-  @Test
   void testQueryValResult() throws SQLException, IllegalAccessException {
     Product example = createRandomProduct();
     String res = Db.create("products", example);
@@ -64,6 +57,13 @@ public class DbTest {
   }
 
   @Test
+  void testInsert() throws SQLException, IllegalAccessException {
+    String res =
+        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    assertNotNull(res);
+  }
+
+  @Test
   void testqueryList() throws SQLException, IllegalAccessException {
     Db.create("products", createRandomProduct());
     Db.create("products", createRandomProduct());
@@ -73,5 +73,18 @@ public class DbTest {
 
     assertNotNull(products);
     assertTrue(products.size() >= 3);
+  }
+
+  @Test
+  void testDelete() throws SQLException, IllegalAccessException {
+    String res =
+        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    Optional result = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res);
+    assertFalse(result.isEmpty());
+
+    Db.delete("products", res);
+
+    result = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res);
+    assertTrue(result.isEmpty());
   }
 }

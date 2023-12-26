@@ -73,6 +73,12 @@ public class Db {
     return result;
   }
 
+  public static boolean execute(String query, Object... args) throws SQLException {
+    PreparedStatement statement = conn.prepareStatement(query);
+    setParameters(statement, args);
+    return statement.execute();
+  }
+
   private static <T> T mapResultSetToType(ResultSet resultSet, Class<T> type) throws SQLException {
     ResultSetMetaData metaData = resultSet.getMetaData();
     int columnCount = metaData.getColumnCount();
@@ -140,6 +146,10 @@ public class Db {
     } else {
       throw new IllegalArgumentException("Unable to create new entry");
     }
+  }
+
+  public static boolean delete(String tableName, String id) throws SQLException {
+    return Db.execute("DELETE FROM " + tableName + " WHERE id = ?", new BigInteger(id));
   }
 
   private static void addCastedValue(PreparedStatement preparedStatement, int index, Object value)

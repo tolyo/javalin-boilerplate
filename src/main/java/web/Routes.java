@@ -1,7 +1,6 @@
 package web;
 
-import static io.javalin.http.HandlerType.GET;
-import static io.javalin.http.HandlerType.POST;
+import static io.javalin.http.HandlerType.*;
 
 import io.javalin.Javalin;
 import java.util.ArrayList;
@@ -28,7 +27,8 @@ public class Routes {
     new RouteMapping(POST, CalculatorController.URL, CalculatorController::post),
     new RouteMapping(GET, "/_products/{id}", ProductController::getOne),
     new RouteMapping(GET, "/products**", Layout::get),
-    new RouteMapping(GET, "/_products", ProductController::getAll)
+    new RouteMapping(GET, "/_products", ProductController::getAll),
+    new RouteMapping(POST, "/products/delete", ProductController::delete)
   };
 
   static {

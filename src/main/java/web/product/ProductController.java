@@ -23,8 +23,19 @@ public class ProductController {
     // Implementation for creating a product
   }
 
-  public static void delete(@NotNull Context ctx, @NotNull String s) {
-    // Implementation for deleting a product
+  public static class DeleteReq {
+    public String id;
+  }
+
+  public static void delete(@NotNull Context ctx) {
+    String id = ctx.bodyAsClass(DeleteReq.class).id;
+    try {
+      Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
+      ctx.status(204);
+    } catch (SQLException e) {
+      System.out.println(e);
+      ctx.status(404);
+    }
   }
 
   public static Context getAll(@NotNull Context ctx) {
@@ -44,10 +55,20 @@ public class ProductController {
     } else {
       return render(
           ctx,
-          table(
-              getFieldNames(Product.class).stream()
-                  .map(f -> tr(th(f), td(getFieldValue(product.get(), f).toString())))
-                  .toArray(DomContent[]::new)));
+          main(
+              table(
+                  getFieldNames(Product.class).stream()
+                      .map(f -> tr(th(f), td(getFieldValue(product.get(), f).toString())))
+                      .toArray(DomContent[]::new)),
+              menu(
+                  a("Edit")
+                      .attr("onclick", StateService.edit("products", product.get().id.toString())),
+                  form()
+                      .attr("data-action", "/products/delete")
+                      .attr("data-success", StateService.list("products"))
+                      .with(
+                          input().isHidden().withName("id").withValue(product.get().id.toString()),
+                          button("Delete").withClass("secondary")))));
     }
   }
 
