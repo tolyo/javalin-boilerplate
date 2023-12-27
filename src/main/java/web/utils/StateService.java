@@ -6,7 +6,7 @@ public class StateService {
     return "stateService.go('" + name + "')";
   }
 
-  public static String newAction(String name) {
+  public static String create(String name) {
     return "stateService.go('" + name + ":new')";
   }
 

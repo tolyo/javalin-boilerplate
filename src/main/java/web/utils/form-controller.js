@@ -31,6 +31,7 @@ export default class FormController {
 
     // Prevent the form from submitting and call the submit() method instead
     this.form.addEventListener("submit", (ev) => {
+      console.log("submit");
       ev.preventDefault();
       this.submit();
     });

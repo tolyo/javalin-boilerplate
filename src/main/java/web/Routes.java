@@ -25,10 +25,13 @@ public class Routes {
     new RouteMapping(GET, DocsController.URL, DocsController::get),
     new RouteMapping(GET, CalculatorController.URL, CalculatorController::get),
     new RouteMapping(POST, CalculatorController.URL, CalculatorController::post),
+    new RouteMapping(GET, "/_products/new", ProductController::newForm),
     new RouteMapping(GET, "/_products/{id}", ProductController::getOne),
-    new RouteMapping(GET, "/products**", Layout::get),
     new RouteMapping(GET, "/_products", ProductController::getAll),
-    new RouteMapping(POST, "/products/delete", ProductController::delete)
+    new RouteMapping(GET, "/_products/edit/{id}", ProductController::updateForm),
+    new RouteMapping(POST, "/products/delete", ProductController::delete),
+    new RouteMapping(POST, "/products", ProductController::create),
+    new RouteMapping(GET, "/products**", Layout::get)
   };
 
   static {

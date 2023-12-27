@@ -19,16 +19,38 @@ import web.utils.StateService;
 
 public class ProductController {
 
-  public static void create(@NotNull Context ctx) {
-    // Implementation for creating a product
+  public static Context newForm(@NotNull Context ctx) {
+    return render(
+        ctx,
+        main(
+            form()
+                .attr("data-action", "/products/create")
+                .attr("data-success", StateService.created("products"))
+                .with(
+                    Stream.concat(
+                            getFieldNames(Product.class).stream()
+                                .filter(f -> f != "id")
+                                .map(f -> label(f).with(input().withName(f))),
+                            Stream.of(button("Submit").withType("submit")))
+                        .toArray(DomContent[]::new))));
   }
 
-  public static class DeleteReq {
+  public static Context updateForm(@NotNull Context ctx) {
+    return render(
+        ctx,
+        main(
+            form()
+                .attr("data-action", "/products/create")
+                .attr("data-success", StateService.created("products"))
+                .with()));
+  }
+
+  private static class IdReq {
     public String id;
   }
 
   public static void delete(@NotNull Context ctx) {
-    String id = ctx.bodyAsClass(DeleteReq.class).id;
+    String id = ctx.bodyAsClass(IdReq.class).id;
     try {
       Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
       ctx.status(204);
@@ -43,7 +65,11 @@ public class ProductController {
     List<Product> items = Db.queryList(clazz, "SELECT * FROM products");
     List<String> fields = getFieldNames(clazz);
 
-    return render(ctx, createProductTable(fields, items));
+    return render(
+        ctx,
+        main(
+            createProductTable(fields, items),
+            menu(button("Create").attr("onclick", StateService.create("products")))));
   }
 
   public static Context getOne(@NotNull Context ctx) throws SQLException {
@@ -72,8 +98,10 @@ public class ProductController {
     }
   }
 
-  public static void update(@NotNull Context ctx, @NotNull String s) {
-    // Implementation for updating a product
+  public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
+    Product product = ctx.bodyAsClass(Product.class);
+    String res = Db.create("product", product);
+    return ctx.json(new IdReq().id = res).status(204);
   }
 
   private static List<String> getFieldNames(Class<?> clazz) {
