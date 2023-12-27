@@ -24,7 +24,7 @@ public class ProductController {
         ctx,
         main(
             form()
-                .attr("data-action", "/products/create")
+                .attr("data-action", "/products")
                 .attr("data-success", StateService.created("products"))
                 .with(
                     Stream.concat(
@@ -100,8 +100,10 @@ public class ProductController {
 
   public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
     Product product = ctx.bodyAsClass(Product.class);
-    String res = Db.create("product", product);
-    return ctx.json(new IdReq().id = res).status(204);
+    String res = Db.create("products", product);
+    IdReq resBody = new IdReq();
+    resBody.id = res;
+    return ctx.json(resBody).status(201);
   }
 
   private static List<String> getFieldNames(Class<?> clazz) {
