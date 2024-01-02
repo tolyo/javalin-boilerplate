@@ -148,6 +148,34 @@ public class Db {
     }
   }
 
+  public static void update(String tableName, String id, Object model)
+      throws SQLException, IllegalAccessException {
+    Field[] fields =
+        Arrays.stream(model.getClass().getDeclaredFields())
+            .filter(field -> !"id".equals(field.getName()))
+            .toArray(Field[]::new);
+    String setClause =
+        Arrays.stream(fields)
+            .map(field -> toSnakeCase(field.getName()) + " = ?")
+            .collect(Collectors.joining(", "));
+
+    String query =
+        String.format("UPDATE %s SET %s WHERE id = %s", tableName, setClause, toSnakeCase(id));
+
+    PreparedStatement preparedStatement = conn.prepareStatement(query);
+    int index = 1;
+    for (Field f : fields) {
+      Object value = f.get(model);
+      addCastedValue(preparedStatement, index, value);
+      index++;
+    }
+
+    int affectedRows = preparedStatement.executeUpdate();
+    if (affectedRows == 0) {
+      throw new IllegalArgumentException("No record found with the specified id");
+    }
+  }
+
   public static boolean delete(String tableName, String id) throws SQLException {
     return Db.execute("DELETE FROM " + tableName + " WHERE id = ?", new BigInteger(id));
   }

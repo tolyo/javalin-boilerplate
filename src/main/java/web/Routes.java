@@ -31,6 +31,7 @@ public class Routes {
     new RouteMapping(GET, "/_products/edit/{id}", ProductController::updateForm),
     new RouteMapping(POST, "/products/delete", ProductController::delete),
     new RouteMapping(POST, "/products", ProductController::create),
+    new RouteMapping(POST, "/products/update/{id}", ProductController::update),
     new RouteMapping(GET, "/products**", Layout::get)
   };
 

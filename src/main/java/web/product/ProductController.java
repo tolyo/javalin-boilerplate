@@ -29,20 +29,42 @@ public class ProductController {
                 .with(
                     Stream.concat(
                             getFieldNames(Product.class).stream()
-                                .filter(f -> f != "id")
+                                .filter(f -> !"id".equals(f))
                                 .map(f -> label(f).with(input().withName(f))),
                             Stream.of(button("Submit").withType("submit")))
                         .toArray(DomContent[]::new))));
   }
 
-  public static Context updateForm(@NotNull Context ctx) {
-    return render(
-        ctx,
-        main(
-            form()
-                .attr("data-action", "/products/create")
-                .attr("data-success", StateService.created("products"))
-                .with()));
+  public static Context updateForm(@NotNull Context ctx) throws SQLException {
+    String id = ctx.pathParam("id");
+    List<String> fields = getFieldNames(Product.class);
+    Optional<Product> product =
+        Db.queryVal(Product.class, "SELECT * FROM products WHERE id = ?", new BigInteger(id));
+    if (product.isEmpty()) {
+      return render(ctx, div("Not found"));
+    } else {
+      return render(
+          ctx,
+          main(
+              form()
+                  .attr("data-action", "/products/update/" + id)
+                  .attr("data-success", StateService.get("products", id))
+                  .with(
+                      Stream.concat(
+                              fields.stream()
+                                  .filter(f -> !"id".equals(f))
+                                  .map(
+                                      f ->
+                                          label(f)
+                                              .with(
+                                                  input()
+                                                      .withName(f)
+                                                      .withValue(
+                                                          getFieldValue(product.get(), f)
+                                                              .toString()))),
+                              Stream.of(button("Submit").withType("submit")))
+                          .toArray(DomContent[]::new))));
+    }
   }
 
   private static class IdReq {
@@ -55,7 +77,6 @@ public class ProductController {
       Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
       ctx.status(204);
     } catch (SQLException e) {
-      System.out.println(e);
       ctx.status(404);
     }
   }
@@ -106,6 +127,13 @@ public class ProductController {
     return ctx.json(resBody).status(201);
   }
 
+  public static Context update(@NotNull Context ctx) throws SQLException, IllegalAccessException {
+    String id = ctx.pathParam("id");
+    Product product = ctx.bodyAsClass(Product.class);
+    Db.update("products", id, product);
+    return ctx.json("").status(204);
+  }
+
   private static List<String> getFieldNames(Class<?> clazz) {
     return Arrays.stream(clazz.getDeclaredFields())
         .map(field -> field.getName())
@@ -148,7 +176,7 @@ public class ProductController {
     try {
       return Product.class.getDeclaredField(fieldName).get(item);
     } catch (IllegalAccessException | NoSuchFieldException e) {
-      throw new RuntimeException(e);
+      return "";
     }
   }
 

@@ -87,4 +87,19 @@ public class DbTest {
     result = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res);
     assertTrue(result.isEmpty());
   }
+
+  @Test
+  void testUpdate() throws SQLException, IllegalAccessException {
+    String res =
+        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    assertNotNull(res);
+    Product product = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res).get();
+    assertEquals(product.amount, 1);
+    assertEquals(product.price, BigDecimal.valueOf(100.00));
+
+    Db.update("products", res, new Product("test", "test.com", 12, BigDecimal.valueOf(120.00)));
+    product = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res).get();
+    assertEquals(product.amount, 12);
+    assertEquals(product.price, BigDecimal.valueOf(120.00));
+  }
 }
