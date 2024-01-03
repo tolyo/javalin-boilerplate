@@ -6,6 +6,7 @@ import static web.utils.ViewHelpers.render;
 import app.db.Db;
 import app.models.Product;
 import io.javalin.http.Context;
+import j2html.tags.DomContent;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -18,23 +19,12 @@ import web.utils.StateService;
 public class ProductController {
 
   public static Context newForm(@NotNull Context ctx) {
-
     return render(
-        ctx,
-        main(
-            form()
-                .attr("data-action", "/products")
-                .attr("data-success", StateService.created("products"))
-                .with(
-                    each(
-                        filter(getFieldNames(Product.class), f -> !"id".equals(f)),
-                        f -> label(f).with(input().withName(f))),
-                    button("Submit").withType("submit"))));
+        ctx, main(createForm(Optional.empty(), "/products", StateService.created("products"))));
   }
 
   public static Context updateForm(@NotNull Context ctx) throws SQLException {
     String id = ctx.pathParam("id");
-    List<String> fields = getFieldNames(Product.class);
     Optional<Product> product =
         Db.queryVal(Product.class, "SELECT * FROM products WHERE id = ?", new BigInteger(id));
     if (product.isEmpty()) {
@@ -42,21 +32,30 @@ public class ProductController {
     } else {
       return render(
           ctx,
-          main(
-              form()
-                  .attr("data-action", "/products/update/" + id)
-                  .attr("data-success", StateService.get("products", id))
-                  .with(
-                      each(
-                          filter(fields, f -> !"id".equals(f)),
-                          f ->
-                              label(f)
-                                  .with(
-                                      input()
-                                          .withName(f)
-                                          .withValue(getFieldValue(product.get(), f).toString()))),
-                      button("Submit").withType("submit"))));
+          main(createForm(product, "/products/update/" + id, StateService.get("products", id))));
     }
+  }
+
+  private static DomContent createForm(
+      Optional<Product> product, String dataAction, String dataSuccess) {
+    List<String> fields = getFieldNames(Product.class);
+    return form()
+        .attr("data-action", dataAction)
+        .attr("data-success", dataSuccess)
+        .with(
+            each(
+                filter(fields, f -> !"id".equals(f)),
+                f ->
+                    label(f)
+                        .with(
+                            product
+                                .map(
+                                    p ->
+                                        input()
+                                            .withName(f)
+                                            .withValue(getFieldValue(p, f).toString()))
+                                .orElse(input().withName(f)))),
+            button("Submit").withType("submit"));
   }
 
   public static Context getAll(@NotNull Context ctx) {
