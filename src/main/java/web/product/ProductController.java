@@ -13,13 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import web.utils.StateService;
 
 public class ProductController {
 
   public static Context newForm(@NotNull Context ctx) {
+
     return render(
         ctx,
         main(
@@ -27,12 +27,10 @@ public class ProductController {
                 .attr("data-action", "/products")
                 .attr("data-success", StateService.created("products"))
                 .with(
-                    Stream.concat(
-                            getFieldNames(Product.class).stream()
-                                .filter(f -> !"id".equals(f))
-                                .map(f -> label(f).with(input().withName(f))),
-                            Stream.of(button("Submit").withType("submit")))
-                        .toArray(DomContent[]::new))));
+                    each(
+                        filter(getFieldNames(Product.class), f -> !"id".equals(f)),
+                        f -> label(f).with(input().withName(f))),
+                    button("Submit").withType("submit"))));
   }
 
   public static Context updateForm(@NotNull Context ctx) throws SQLException {
@@ -50,20 +48,15 @@ public class ProductController {
                   .attr("data-action", "/products/update/" + id)
                   .attr("data-success", StateService.get("products", id))
                   .with(
-                      Stream.concat(
-                              fields.stream()
-                                  .filter(f -> !"id".equals(f))
-                                  .map(
-                                      f ->
-                                          label(f)
-                                              .with(
-                                                  input()
-                                                      .withName(f)
-                                                      .withValue(
-                                                          getFieldValue(product.get(), f)
-                                                              .toString()))),
-                              Stream.of(button("Submit").withType("submit")))
-                          .toArray(DomContent[]::new))));
+                      each(
+                          filter(fields, f -> !"id".equals(f)),
+                          f ->
+                              label(f)
+                                  .with(
+                                      input()
+                                          .withName(f)
+                                          .withValue(getFieldValue(product.get(), f).toString()))),
+                      button("Submit").withType("submit"))));
     }
   }
 
@@ -104,18 +97,23 @@ public class ProductController {
           ctx,
           main(
               table(
-                  getFieldNames(Product.class).stream()
-                      .map(f -> tr(th(f), td(getFieldValue(product.get(), f).toString())))
-                      .toArray(DomContent[]::new)),
-              menu(
-                  a("Edit")
-                      .attr("onclick", StateService.edit("products", product.get().id.toString())),
-                  form()
-                      .attr("data-action", "/products/delete")
-                      .attr("data-success", StateService.list("products"))
-                      .with(
-                          input().isHidden().withName("id").withValue(product.get().id.toString()),
-                          button("Delete").withClass("secondary")))));
+                  each(
+                      getFieldNames(Product.class),
+                      f -> tr(th(f), td(getFieldValue(product.get(), f).toString()))),
+                  menu(
+                      a("Edit")
+                          .attr(
+                              "onclick",
+                              StateService.edit("products", product.get().id.toString())),
+                      form()
+                          .attr("data-action", "/products/delete")
+                          .attr("data-success", StateService.list("products"))
+                          .with(
+                              input()
+                                  .isHidden()
+                                  .withName("id")
+                                  .withValue(product.get().id.toString()),
+                              button("Delete").withClass("secondary"))))));
     }
   }
 
@@ -145,31 +143,17 @@ public class ProductController {
   }
 
   private static DomContent createTableHeader(List<String> fields) {
-    return thead(
-        Stream.concat(
-                fields.stream().map(ProductController::createTableHeaderCell), Stream.of(th()))
-            .toArray(DomContent[]::new));
-  }
-
-  private static DomContent createTableHeaderCell(String field) {
-    return th(field);
+    return thead(each(fields, f -> th(f)), th()); // button column
   }
 
   private static DomContent createTableBody(List<String> fields, List<Product> items) {
-    return tbody(
-        items.stream().map(item -> createTableRow(fields, item)).toArray(DomContent[]::new));
+    return tbody(each(items, item -> createTableRow(fields, item)));
   }
 
   private static DomContent createTableRow(List<String> fields, Product item) {
     return tr(
-        Stream.concat(
-                fields.stream().map(f -> createTableCell(String.valueOf(getFieldValue(item, f)))),
-                Stream.of(createViewAction(item)))
-            .toArray(DomContent[]::new));
-  }
-
-  private static DomContent createTableCell(String value) {
-    return td(value);
+        each(fields, f -> td(String.valueOf(getFieldValue(item, f)))),
+        td(a("View").attr("onclick", StateService.get("products", item.id.toString()))));
   }
 
   private static Object getFieldValue(Product item, String fieldName) {
@@ -178,9 +162,5 @@ public class ProductController {
     } catch (IllegalAccessException | NoSuchFieldException e) {
       return "";
     }
-  }
-
-  private static DomContent createViewAction(Product item) {
-    return td(a("View").attr("onclick", StateService.get("products", item.id.toString())));
   }
 }
