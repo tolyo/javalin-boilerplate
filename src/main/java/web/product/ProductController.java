@@ -126,7 +126,7 @@ public class ProductController {
   public static void delete(@NotNull Context ctx) {
     String id = ctx.bodyAsClass(IdReq.class).id;
     try {
-      Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
+      Db.delete("products", id);
       ctx.status(204);
     } catch (SQLException e) {
       ctx.status(404);
