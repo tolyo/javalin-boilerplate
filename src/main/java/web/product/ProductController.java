@@ -10,11 +10,10 @@ import j2html.tags.DomContent;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import web.utils.StateService;
+import web.utils.ValidationHelper;
 
 public class ProductController {
 
@@ -110,17 +109,27 @@ public class ProductController {
 
   public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
     Product product = ctx.bodyAsClass(Product.class);
-    String res = Db.create("products", product);
-    IdReq resBody = new IdReq();
-    resBody.id = res;
-    return ctx.json(resBody).status(201);
+    ValidationHelper validation = new ValidationHelper(product);
+    if (validation.isValid()) {
+      String res = Db.create("products", product);
+      IdReq resBody = new IdReq();
+      resBody.id = res;
+      return ctx.json(resBody).status(201);
+    } else {
+      return ctx.json(validation.getErrorMap()).status(422);
+    }
   }
 
   public static Context update(@NotNull Context ctx) throws SQLException, IllegalAccessException {
     String id = ctx.pathParam("id");
     Product product = ctx.bodyAsClass(Product.class);
-    Db.update("products", id, product);
-    return ctx.json("").status(204);
+    ValidationHelper validation = new ValidationHelper(product);
+    if (validation.isValid()) {
+      Db.update("products", id, product);
+      return ctx.json("").status(204);
+    } else {
+      return ctx.json(validation.getErrorMap()).status(422);
+    }
   }
 
   public static void delete(@NotNull Context ctx) {

@@ -23,6 +23,7 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     errorprone("com.google.errorprone:error_prone_core:2.+")
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 }
 
 test {
@@ -44,7 +45,7 @@ task copyFrontendFiles(type: Copy) {
     from 'src/main/java' // Source directory containing your custom files
     into 'build/classes/java/main' // Destination directory
     include '**/*.html', '**/*.css', '**/*.js', '**/cdn-libs.json' // Include specific file extensions
-    exclude '**/node_modules', "**/playwright-report", "**/test-results", '**/.eslintrc.js', '**/*.json', '**/playwright.config.js'
+    exclude '**/node_modules', "**/playwright-report", "**/test-results", '**/.eslintrc.js', '**/playwright.config.js'
 }
 
 run.dependsOn copyFrontendFiles
