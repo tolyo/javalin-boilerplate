@@ -6,13 +6,12 @@ import static web.utils.ViewHelpers.render;
 import app.db.Db;
 import app.models.Product;
 import io.javalin.http.Context;
-import j2html.tags.DomContent;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import web.utils.StateService;
 
@@ -60,20 +59,6 @@ public class ProductController {
     }
   }
 
-  private static class IdReq {
-    public String id;
-  }
-
-  public static void delete(@NotNull Context ctx) {
-    String id = ctx.bodyAsClass(IdReq.class).id;
-    try {
-      Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
-      ctx.status(204);
-    } catch (SQLException e) {
-      ctx.status(404);
-    }
-  }
-
   public static Context getAll(@NotNull Context ctx) {
     Class clazz = Product.class;
     List<Product> items = Db.queryList(clazz, "SELECT * FROM products");
@@ -82,7 +67,19 @@ public class ProductController {
     return render(
         ctx,
         main(
-            createProductTable(fields, items),
+            table(
+                thead(each(fields, f -> th(f)), th()),
+                tbody(
+                    each(
+                        items,
+                        item ->
+                            tr(
+                                each(fields, f -> td(String.valueOf(getFieldValue(item, f)))),
+                                td(
+                                    a("View")
+                                        .attr(
+                                            "onclick",
+                                            StateService.get("products", item.id.toString()))))))),
             menu(button("Create").attr("onclick", StateService.create("products")))));
   }
 
@@ -99,21 +96,16 @@ public class ProductController {
               table(
                   each(
                       getFieldNames(Product.class),
-                      f -> tr(th(f), td(getFieldValue(product.get(), f).toString()))),
-                  menu(
-                      a("Edit")
-                          .attr(
-                              "onclick",
-                              StateService.edit("products", product.get().id.toString())),
-                      form()
-                          .attr("data-action", "/products/delete")
-                          .attr("data-success", StateService.list("products"))
-                          .with(
-                              input()
-                                  .isHidden()
-                                  .withName("id")
-                                  .withValue(product.get().id.toString()),
-                              button("Delete").withClass("secondary"))))));
+                      f -> tr(th(f), td(getFieldValue(product.get(), f).toString())))),
+              menu(
+                  a("Edit")
+                      .attr("onclick", StateService.edit("products", product.get().id.toString())),
+                  form()
+                      .attr("data-action", "/products/delete")
+                      .attr("data-success", StateService.list("products"))
+                      .with(
+                          input().isHidden().withName("id").withValue(product.get().id.toString()),
+                          button("Delete").withClass("secondary")))));
     }
   }
 
@@ -132,28 +124,22 @@ public class ProductController {
     return ctx.json("").status(204);
   }
 
+  public static void delete(@NotNull Context ctx) {
+    String id = ctx.bodyAsClass(IdReq.class).id;
+    try {
+      Db.execute("DELETE FROM products WHERE id = ?", new BigInteger(id));
+      ctx.status(204);
+    } catch (SQLException e) {
+      ctx.status(404);
+    }
+  }
+
   private static List<String> getFieldNames(Class<?> clazz) {
-    return Arrays.stream(clazz.getDeclaredFields())
-        .map(field -> field.getName())
-        .collect(Collectors.toList());
-  }
-
-  private static DomContent createProductTable(List<String> fields, List<Product> items) {
-    return table(createTableHeader(fields), createTableBody(fields, items));
-  }
-
-  private static DomContent createTableHeader(List<String> fields) {
-    return thead(each(fields, f -> th(f)), th()); // button column
-  }
-
-  private static DomContent createTableBody(List<String> fields, List<Product> items) {
-    return tbody(each(items, item -> createTableRow(fields, item)));
-  }
-
-  private static DomContent createTableRow(List<String> fields, Product item) {
-    return tr(
-        each(fields, f -> td(String.valueOf(getFieldValue(item, f)))),
-        td(a("View").attr("onclick", StateService.get("products", item.id.toString()))));
+    ArrayList list = new ArrayList();
+    for (Field i : clazz.getDeclaredFields()) {
+      list.add(i.getName());
+    }
+    return list;
   }
 
   private static Object getFieldValue(Product item, String fieldName) {
@@ -162,5 +148,9 @@ public class ProductController {
     } catch (IllegalAccessException | NoSuchFieldException e) {
       return "";
     }
+  }
+
+  private static class IdReq {
+    public String id;
   }
 }
