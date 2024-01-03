@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import web.utils.StateService;
-import web.utils.ValidationHelper;
 
 public class ProductController {
 
@@ -108,28 +107,20 @@ public class ProductController {
   }
 
   public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
-    Product product = ctx.bodyAsClass(Product.class);
-    ValidationHelper validation = new ValidationHelper(product);
-    if (validation.isValid()) {
-      String res = Db.create("products", product);
-      IdReq resBody = new IdReq();
-      resBody.id = res;
-      return ctx.json(resBody).status(201);
-    } else {
-      return ctx.json(validation.getErrorMap()).status(422);
-    }
+    ProductValidator validator = new ProductValidator(ctx.body());
+    Product product = validator.validate();
+    String res = Db.create("products", product);
+    IdReq resBody = new IdReq();
+    resBody.id = res;
+    return ctx.json(resBody).status(201);
   }
 
   public static Context update(@NotNull Context ctx) throws SQLException, IllegalAccessException {
     String id = ctx.pathParam("id");
-    Product product = ctx.bodyAsClass(Product.class);
-    ValidationHelper validation = new ValidationHelper(product);
-    if (validation.isValid()) {
-      Db.update("products", id, product);
-      return ctx.json("").status(204);
-    } else {
-      return ctx.json(validation.getErrorMap()).status(422);
-    }
+    ProductValidator validator = new ProductValidator(ctx.body());
+    Product product = validator.validate();
+    Db.update("products", id, product);
+    return ctx.json("").status(204);
   }
 
   public static void delete(@NotNull Context ctx) {
@@ -150,7 +141,7 @@ public class ProductController {
     return list;
   }
 
-  private static Object getFieldValue(Product item, String fieldName) {
+  public static Object getFieldValue(Object item, String fieldName) {
     try {
       return Product.class.getDeclaredField(fieldName).get(item);
     } catch (IllegalAccessException | NoSuchFieldException e) {

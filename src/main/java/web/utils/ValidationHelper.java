@@ -1,38 +1,22 @@
 package web.utils;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import static web.product.ProductController.getFieldValue;
 
-public class ValidationHelper {
-  public static Validator validator =
-      Validation.byDefaultProvider()
-          .configure()
-          .messageInterpolator(new ParameterMessageInterpolator())
-          .buildValidatorFactory()
-          .getValidator();
-  private Set<ConstraintViolation<Object>> violations;
+import io.javalin.json.JavalinJackson;
+import io.javalin.validation.BodyValidator;
+import kotlin.jvm.functions.Function1;
+import org.jetbrains.annotations.NotNull;
 
-  public ValidationHelper(Object object) {
-    this.violations = validator.validate(object);
+public class ValidationHelper extends BodyValidator {
+
+  public ValidationHelper(String body, Class clazz) {
+    super(body, clazz, new JavalinJackson());
   }
 
-  public boolean isValid() {
-    return this.violations.size() == 0;
-  }
+  public static String NULL_NOT_EMPTY_MESSAGE = "Cannot be empty";
 
-  public Map<String, String> getErrorMap() {
-    Map<String, String> errorsMap = new HashMap<>();
-    // Populate the Map with field names and error messages
-    for (ConstraintViolation<Object> violation : violations) {
-      String fieldName = violation.getPropertyPath().toString();
-      String errorMessage = violation.getMessage();
-      errorsMap.put(fieldName, errorMessage);
-    }
-    return errorsMap;
+  @NotNull
+  public static Function1<Object, Boolean> notNullOrEmpty(@NotNull String field) {
+    return it -> getFieldValue(it, field) != null && getFieldValue(it, field) != "";
   }
 }

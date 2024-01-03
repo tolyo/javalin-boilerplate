@@ -3,8 +3,12 @@ package web;
 import static io.javalin.http.HandlerType.*;
 
 import io.javalin.Javalin;
+import io.javalin.validation.ValidationError;
+import io.javalin.validation.ValidationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import web.calculator.CalculatorController;
 import web.demo.DemoController;
 import web.docs.DocsController;
@@ -43,6 +47,16 @@ public class Routes {
     routes.forEach(
         routeMapping ->
             javalin.addHandler(routeMapping.method, routeMapping.url, routeMapping.handler));
+
+    javalin.exception(
+        ValidationException.class,
+        (exception, ctx) -> {
+          Map<String, String> errorsMap = new HashMap<>();
+          Map<String, List<ValidationError<Object>>> errors = exception.getErrors();
+          errors.keySet().forEach(k -> errorsMap.put(k, errors.get(k).get(0).getMessage()));
+          ctx.status(422).json(errorsMap);
+        });
+
     return javalin;
   }
 }
