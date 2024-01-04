@@ -1,8 +1,5 @@
 package web.product;
 
-import static web.utils.ValidationHelper.NULL_NOT_EMPTY_MESSAGE;
-import static web.utils.ValidationHelper.notNullOrEmpty;
-
 import app.models.Product;
 import web.utils.ValidationHelper;
 

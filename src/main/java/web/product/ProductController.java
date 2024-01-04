@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
+import web.utils.IdReq;
 import web.utils.StateService;
 
 public class ProductController {
@@ -23,8 +24,7 @@ public class ProductController {
 
   public static Context updateForm(@NotNull Context ctx) throws SQLException {
     String id = ctx.pathParam("id");
-    Optional<Product> product =
-        Db.queryVal(Product.class, "SELECT * FROM products WHERE id = ?", new BigInteger(id));
+    Optional<Product> product = Db.findById(Product.class, new BigInteger(id));
     if (product.isEmpty()) {
       return render(ctx, div("Not found"));
     } else {
@@ -82,8 +82,7 @@ public class ProductController {
 
   public static Context getOne(@NotNull Context ctx) throws SQLException {
     String id = ctx.pathParam("id");
-    Optional<Product> product =
-        Db.queryVal(Product.class, "SELECT * FROM products WHERE id = ?", new BigInteger(id));
+    Optional<Product> product = Db.findById(Product.class, new BigInteger(id));
     if (product.isEmpty()) {
       return render(ctx, div("Not found"));
     } else {
@@ -109,7 +108,7 @@ public class ProductController {
   public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
     ProductValidator validator = new ProductValidator(ctx.body());
     Product product = validator.validate();
-    String res = Db.create("products", product);
+    String res = Db.create(product);
     IdReq resBody = new IdReq();
     resBody.id = res;
     return ctx.json(resBody).status(201);
@@ -119,7 +118,7 @@ public class ProductController {
     String id = ctx.pathParam("id");
     ProductValidator validator = new ProductValidator(ctx.body());
     Product product = validator.validate();
-    Db.update("products", id, product);
+    Db.update(id, product);
     return ctx.json("").status(204);
   }
 
@@ -147,9 +146,5 @@ public class ProductController {
     } catch (IllegalAccessException | NoSuchFieldException e) {
       return "";
     }
-  }
-
-  private static class IdReq {
-    public String id;
   }
 }

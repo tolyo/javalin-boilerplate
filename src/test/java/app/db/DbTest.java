@@ -36,7 +36,7 @@ public class DbTest {
   @Test
   void testQueryValResult() throws SQLException, IllegalAccessException {
     Product example = createRandomProduct();
-    String res = Db.create("products", example);
+    String res = Db.create(example);
 
     assertNotNull(res);
 
@@ -58,16 +58,15 @@ public class DbTest {
 
   @Test
   void testInsert() throws SQLException, IllegalAccessException {
-    String res =
-        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    String res = Db.create(new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
     assertNotNull(res);
   }
 
   @Test
   void testqueryList() throws SQLException, IllegalAccessException {
-    Db.create("products", createRandomProduct());
-    Db.create("products", createRandomProduct());
-    Db.create("products", createRandomProduct());
+    Db.create(createRandomProduct());
+    Db.create(createRandomProduct());
+    Db.create(createRandomProduct());
 
     List<Product> products = Db.queryList(Product.class, "SELECT * FROM products");
 
@@ -77,8 +76,7 @@ public class DbTest {
 
   @Test
   void testDelete() throws SQLException, IllegalAccessException {
-    String res =
-        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    String res = Db.create(new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
     Optional result = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res);
     assertFalse(result.isEmpty());
 
@@ -90,14 +88,13 @@ public class DbTest {
 
   @Test
   void testUpdate() throws SQLException, IllegalAccessException {
-    String res =
-        Db.create("products", new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
+    String res = Db.create(new Product("test", "test.com", 1, BigDecimal.valueOf(100.00)));
     assertNotNull(res);
     Product product = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res).get();
     assertEquals(product.amount, 1);
     assertEquals(product.price, BigDecimal.valueOf(100.00));
 
-    Db.update("products", res, new Product("test", "test.com", 12, BigDecimal.valueOf(120.00)));
+    Db.update(res, new Product("test", "test.com", 12, BigDecimal.valueOf(120.00)));
     product = Db.queryVal(Product.class, "SELECT * FROM products WHERE id = " + res).get();
     assertEquals(product.amount, 12);
     assertEquals(product.price, BigDecimal.valueOf(120.00));

@@ -117,8 +117,8 @@ public class Db {
     }
   }
 
-  public static String create(String tableName, Object model)
-      throws SQLException, IllegalAccessException {
+  public static String create(Object model) throws SQLException, IllegalAccessException {
+    String tableName = getTableName(model);
     Field[] fields =
         Arrays.stream(model.getClass().getDeclaredFields())
             .filter(field -> !"id".equals(field.getName()))
@@ -148,8 +148,19 @@ public class Db {
     }
   }
 
-  public static void update(String tableName, String id, Object model)
-      throws SQLException, IllegalAccessException {
+  @SuppressWarnings("StringSplitter")
+  private static String getTableName(Object model) {
+    return getTableName(model.getClass());
+  }
+
+  @SuppressWarnings("StringSplitter")
+  private static String getTableName(Class clazz) {
+    String[] split = clazz.getName().split("\\.");
+    String tableName = split[split.length - 1] + "s";
+    return tableName;
+  }
+
+  public static void update(String id, Object model) throws SQLException, IllegalAccessException {
     Field[] fields =
         Arrays.stream(model.getClass().getDeclaredFields())
             .filter(field -> !"id".equals(field.getName()))
@@ -160,7 +171,8 @@ public class Db {
             .collect(Collectors.joining(", "));
 
     String query =
-        String.format("UPDATE %s SET %s WHERE id = %s", tableName, setClause, toSnakeCase(id));
+        String.format(
+            "UPDATE %s SET %s WHERE id = %s", getTableName(model), setClause, toSnakeCase(id));
 
     PreparedStatement preparedStatement = conn.prepareStatement(query);
     int index = 1;
@@ -224,5 +236,17 @@ public class Db {
     }
 
     return result.toString();
+  }
+
+  public static <T> Optional<T> findById(Class<T> clazz, BigInteger id) throws SQLException {
+    return helper(clazz, id);
+  }
+
+  public static <T> Optional<T> findById(Class<T> clazz, String id) throws SQLException {
+    return helper(clazz, id);
+  }
+
+  private static <T> Optional<T> helper(Class<T> clazz, Object id) throws SQLException {
+    return Db.queryVal(clazz, "SELECT * FROM " + getTableName(clazz) + " WHERE id = ?", id);
   }
 }
