@@ -13,10 +13,6 @@ public class ViewHelpers {
     return ctx.html(dc.render());
   }
 
-  public static void view(Context ctx, DomContent dc) {
-    ctx.html(dc.render());
-  }
-
   public static List<String> getFieldNames(Class<?> clazz) {
     ArrayList list = new ArrayList();
     for (Field i : clazz.getDeclaredFields()) {

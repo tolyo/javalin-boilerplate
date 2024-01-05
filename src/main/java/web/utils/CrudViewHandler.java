@@ -160,4 +160,8 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   default String getName() {
     return Db.getTableName(getModelClass());
   }
+
+  static void view(Context ctx, DomContent dc) {
+    ctx.html(dc.render());
+  }
 }
