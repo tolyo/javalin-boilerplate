@@ -57,7 +57,7 @@ public class ProductController {
 
   public static Context getAll(@NotNull Context ctx) {
     Class clazz = Product.class;
-    List<Product> items = Db.queryList(clazz, "SELECT * FROM products");
+    List<Product> items = Db.queryList(clazz);
     List<String> fields = getFieldNames(clazz);
 
     return render(

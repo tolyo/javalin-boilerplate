@@ -59,6 +59,10 @@ public class Db {
     }
   }
 
+  public static <T> List<T> queryList(Class<T> type) {
+    return queryList(type, "SELECT * FROM " + getTableName(type));
+  }
+
   public static <T> List<T> queryList(Class<T> type, String query, Object... args) {
     List<T> result = new ArrayList<>();
     try (PreparedStatement statement = conn.prepareStatement(query)) {
