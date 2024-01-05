@@ -73,7 +73,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
                       getFieldNames(Product.class),
                       f -> tr(th(f), td(getFieldValue(item.get(), f).toString())))),
               menu(
-                  a("Edit").attr("onclick", StateService.edit(getPath(), item.get().getId())),
+                  a("Edit").attr("onclick", StateService.edit(getName(), item.get().getId())),
                   form()
                       .attr("data-action", "/" + getName() + "/" + item.get().getId())
                       .attr("data-method", HttpMethod.DELETE)
@@ -97,8 +97,8 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
             createForm(
                 Optional.empty(),
                 HttpMethod.POST,
-                "/" + getPath(),
-                StateService.created(getPath()))));
+                "/" + getName(),
+                StateService.created(getName()))));
   }
 
   default void updateForm(@NotNull Context ctx, @NotNull String id) {
@@ -112,8 +112,8 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
               createForm(
                   item,
                   HttpMethod.PUT,
-                  "/" + getPath() + "/update/" + id,
-                  StateService.get(getPath(), id))));
+                  "/" + getName() + "/" + id,
+                  StateService.get(getName(), id))));
     }
   }
 

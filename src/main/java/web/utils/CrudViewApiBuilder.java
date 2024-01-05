@@ -35,7 +35,8 @@ public class CrudViewApiBuilder extends ApiBuilder {
           "CrudHandler requires a resource base at the beginning of the provided path, e.g. '/users/{user-id}'");
     }
 
-    // Original crud methods
+    staticInstance()
+        .get(serverPath.replace(resourceId, "") + "new", ctx -> crudHandler.newForm(ctx), roles);
     staticInstance()
         .get(serverPath, ctx -> crudHandler.getOne(ctx, ctx.pathParam(resourceId)), roles);
     staticInstance().get(serverPath.replace(resourceId, ""), crudHandler::getAll, roles);
@@ -45,12 +46,9 @@ public class CrudViewApiBuilder extends ApiBuilder {
     staticInstance()
         .delete(publicPath, ctx -> crudHandler.delete(ctx, ctx.pathParam(resourceId)), roles);
 
-    // Route views
-    staticInstance()
-        .get(serverPath.replace(resourceId, "") + "/new", ctx -> crudHandler.newForm(ctx), roles);
     staticInstance()
         .get(
-            serverPath + "/edit",
+            "/_" + crudHandler.getPath().substring(1) + "/edit/{id}",
             ctx -> crudHandler.updateForm(ctx, ctx.pathParam(resourceId)),
             roles);
     staticInstance()
