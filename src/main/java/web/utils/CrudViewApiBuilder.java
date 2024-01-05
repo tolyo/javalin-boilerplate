@@ -7,10 +7,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrudViewApiBuilder extends ApiBuilder {
 
-  public static void crud(
+  public static void crudViews(@NotNull String path, @NotNull CrudViewHandler crudHandler) {
+    CrudViewApiBuilder.crudViews(path, crudHandler, new RouteRole[0]);
+  }
+
+  public static void crudViews(
       @NotNull String path, @NotNull CrudViewHandler crudHandler, @NotNull RouteRole... roles) {
     String publicPath = prefixPath(path);
-    String serverPath = "_" + publicPath;
+    String serverPath = "/_" + publicPath.substring(1);
     String[] subPaths =
         Arrays.stream(serverPath.split("/")).filter(it -> !it.isEmpty()).toArray(String[]::new);
     if (subPaths.length < 2) {
@@ -49,6 +53,7 @@ public class CrudViewApiBuilder extends ApiBuilder {
             serverPath + "/edit",
             ctx -> crudHandler.updateForm(ctx, ctx.pathParam(resourceId)),
             roles);
-    staticInstance().get(publicPath + "**", ctx -> crudHandler.get(ctx), roles);
+    staticInstance()
+        .get(publicPath.replace(resourceId, "") + "/**", ctx -> crudHandler.get(ctx), roles);
   }
 }

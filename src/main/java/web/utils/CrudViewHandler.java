@@ -26,7 +26,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
 
   @Override
   default void delete(@NotNull Context ctx, @NotNull String id) {
-    Optional<T> product = Db.findById(getModelClass(), id);
+    Optional<T> product = Db.findById(getModelClass(), new BigInteger(id));
     if (product.isEmpty()) {
       ctx.status(404);
     } else {
@@ -55,8 +55,8 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
                                     a("View")
                                         .attr(
                                             "onclick",
-                                            StateService.get(getPath(), item.getId()))))))),
-            menu(button("Create").attr("onclick", StateService.create(getPath())))));
+                                            StateService.get(getName(), item.getId()))))))),
+            menu(button("Create").attr("onclick", StateService.create(getName())))));
   }
 
   @Override
@@ -75,11 +75,10 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
               menu(
                   a("Edit").attr("onclick", StateService.edit(getPath(), item.get().getId())),
                   form()
-                      .attr("data-action", "/" + getPath() + "/delete")
-                      .attr("data-success", StateService.list(getPath()))
-                      .with(
-                          input().isHidden().withName("id").withValue(item.get().getId()),
-                          button("Delete").withClass("secondary")))));
+                      .attr("data-action", "/" + getName() + "/" + item.get().getId())
+                      .attr("data-method", HttpMethod.DELETE)
+                      .attr("data-success", StateService.list(getName()))
+                      .with(button("Delete").withClass("secondary")))));
     }
   }
   ;
@@ -131,4 +130,6 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   }
 
   String getPath();
+
+  String getName();
 }

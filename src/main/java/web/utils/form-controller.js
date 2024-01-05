@@ -169,9 +169,9 @@ export default class FormController {
    * @param { string } method
    */
   maybeAttachBody(method) {
-    // if (this.form.method === "get") {
-    //   return {};
-    // }
+    if (["DELETE", "GET"].includes(this.form.method)) {
+      return {};
+    }
     return {
       method,
       body: JSON.stringify(this.dataModel),
