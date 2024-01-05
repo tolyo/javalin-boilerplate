@@ -9,7 +9,6 @@ import io.javalin.http.Context;
 import j2html.tags.DomContent;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 import web.utils.IdReq;
@@ -22,7 +21,7 @@ public class ProductController {
         ctx, main(createForm(Optional.empty(), "/products", StateService.created("products"))));
   }
 
-  public static Context updateForm(@NotNull Context ctx) throws SQLException {
+  public static Context updateForm(@NotNull Context ctx) {
     String id = ctx.pathParam("id");
     Optional<Product> product = Db.findById(Product.class, new BigInteger(id));
     if (product.isEmpty()) {
@@ -80,7 +79,7 @@ public class ProductController {
             menu(button("Create").attr("onclick", StateService.create("products")))));
   }
 
-  public static Context getOne(@NotNull Context ctx) throws SQLException {
+  public static Context getOne(@NotNull Context ctx) {
     String id = ctx.pathParam("id");
     Optional<Product> product = Db.findById(Product.class, new BigInteger(id));
     if (product.isEmpty()) {
@@ -105,7 +104,7 @@ public class ProductController {
     }
   }
 
-  public static Context create(@NotNull Context ctx) throws SQLException, IllegalAccessException {
+  public static Context create(@NotNull Context ctx) {
     ProductValidator validator = new ProductValidator(ctx.body());
     Product product = validator.validate();
     String res = Db.create(product);
@@ -114,7 +113,7 @@ public class ProductController {
     return ctx.json(resBody).status(201);
   }
 
-  public static Context update(@NotNull Context ctx) throws SQLException, IllegalAccessException {
+  public static Context update(@NotNull Context ctx) {
     String id = ctx.pathParam("id");
     ProductValidator validator = new ProductValidator(ctx.body());
     Product product = validator.validate();
@@ -124,11 +123,12 @@ public class ProductController {
 
   public static void delete(@NotNull Context ctx) {
     String id = ctx.bodyAsClass(IdReq.class).id;
-    try {
+    Optional<Product> product = Db.findById(Product.class, id);
+    if (product.isEmpty()) {
+      ctx.status(404);
+    } else {
       Db.delete("products", id);
       ctx.status(204);
-    } catch (SQLException e) {
-      ctx.status(404);
     }
   }
 
