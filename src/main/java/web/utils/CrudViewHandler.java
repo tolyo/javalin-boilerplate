@@ -1,13 +1,13 @@
 package web.utils;
 
 import static j2html.TagCreator.*;
-import static web.product.ProductController.createForm;
 import static web.utils.ViewHelpers.*;
 
 import app.db.Db;
 import app.models.Product;
 import io.javalin.apibuilder.CrudHandler;
 import io.javalin.http.Context;
+import j2html.tags.DomContent;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -115,6 +115,29 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
                   "/" + getName() + "/" + id,
                   StateService.get(getName(), id))));
     }
+  }
+
+  private DomContent createForm(
+      Optional item, HttpMethod method, String dataAction, String dataSuccess) {
+    List<String> fields = getFieldNames(getModelClass());
+    return form()
+        .attr("data-action", dataAction)
+        .attr("data-method", method.asString())
+        .attr("data-success", dataSuccess)
+        .with(
+            each(
+                filter(fields, f -> !"id".equals(f)),
+                f ->
+                    label(f)
+                        .with(
+                            (DomContent)
+                                item.map(
+                                        p ->
+                                            input()
+                                                .withName(f)
+                                                .withValue(getFieldValue(p, f).toString()))
+                                    .orElse(input().withName(f)))),
+            button("Submit").withType("submit"));
   }
 
   default void get(@NotNull Context ctx) {
