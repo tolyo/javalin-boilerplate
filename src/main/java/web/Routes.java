@@ -14,6 +14,7 @@ import web.demo.DemoController;
 import web.docs.DocsController;
 import web.home.HomeController;
 import web.layout.Layout;
+import web.product.CrudProductController;
 import web.utils.CrudViewApiBuilder;
 import web.utils.RouteMapping;
 import web.utils.UiRouterMapping;
@@ -51,7 +52,7 @@ public class Routes {
 
     javalin.routes(
         () -> {
-          CrudViewApiBuilder.crudViews("products/{id}", new CrudProductController());
+          CrudViewApiBuilder.crudViews(new CrudProductController());
         });
 
     javalin.exception(

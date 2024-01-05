@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrudViewApiBuilder extends ApiBuilder {
 
-  public static void crudViews(@NotNull String path, @NotNull CrudViewHandler crudHandler) {
-    CrudViewApiBuilder.crudViews(path, crudHandler, new RouteRole[0]);
+  public static void crudViews(@NotNull CrudViewHandler crudHandler) {
+    CrudViewApiBuilder.crudViews(crudHandler, new RouteRole[0]);
   }
 
-  public static void crudViews(
-      @NotNull String path, @NotNull CrudViewHandler crudHandler, @NotNull RouteRole... roles) {
+  public static void crudViews(@NotNull CrudViewHandler crudHandler, @NotNull RouteRole... roles) {
+    String path = crudHandler.getPath() + "/{id}";
     String publicPath = prefixPath(path);
     String serverPath = "/_" + publicPath.substring(1);
     String[] subPaths =

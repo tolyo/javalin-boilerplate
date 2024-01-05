@@ -178,7 +178,7 @@ public class Db {
   public static String getTableName(Class clazz) {
     String[] split = clazz.getName().split("\\.");
     String tableName = split[split.length - 1] + "s";
-    return tableName;
+    return tableName.toLowerCase();
   }
 
   public static void update(String id, Object model) {

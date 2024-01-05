@@ -129,7 +129,12 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
     return getCreateValidator(body);
   }
 
-  String getPath();
+  default String getPath() {
+    return "/" + getName();
+  }
+  ;
 
-  String getName();
+  default String getName() {
+    return Db.getTableName(getModelClass());
+  }
 }
