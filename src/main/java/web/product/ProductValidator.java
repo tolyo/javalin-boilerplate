@@ -3,11 +3,12 @@ package web.product;
 import app.models.Product;
 import web.utils.ValidationHelper;
 
-public class ProductValidator extends ValidationHelper {
+public class ProductValidator extends ValidationHelper<Product> {
   public ProductValidator(String body) {
     super(body, Product.class);
   }
 
+  @Override
   public Product validate() {
     return (Product)
         this.check("title", notNullOrEmpty("title"), NULL_NOT_EMPTY_MESSAGE)

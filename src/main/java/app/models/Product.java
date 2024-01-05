@@ -2,8 +2,9 @@ package app.models;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import web.utils.Model;
 
-public class Product {
+public class Product implements Model {
 
   public BigInteger id;
   public String title;
@@ -21,5 +22,10 @@ public class Product {
     this.imageUrl = imageUrl;
     this.amount = amount;
     this.price = price;
+  }
+
+  @Override
+  public String getId() {
+    return id.toString();
   }
 }
