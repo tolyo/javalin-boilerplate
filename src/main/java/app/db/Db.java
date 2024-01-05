@@ -170,12 +170,12 @@ public class Db {
   }
 
   @SuppressWarnings("StringSplitter")
-  private static String getTableName(Object model) {
+  public static String getTableName(Object model) {
     return getTableName(model.getClass());
   }
 
   @SuppressWarnings("StringSplitter")
-  private static String getTableName(Class clazz) {
+  public static String getTableName(Class clazz) {
     String[] split = clazz.getName().split("\\.");
     String tableName = split[split.length - 1] + "s";
     return tableName;

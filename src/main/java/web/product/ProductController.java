@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import j2html.tags.DomContent;
 import java.math.BigInteger;
 import java.util.*;
+import org.eclipse.jetty.http.HttpMethod;
 import org.jetbrains.annotations.NotNull;
 import web.utils.IdReq;
 import web.utils.StateService;
@@ -17,7 +18,10 @@ public class ProductController {
 
   public static Context newForm(@NotNull Context ctx) {
     return render(
-        ctx, main(createForm(Optional.empty(), "/products", StateService.created("products"))));
+        ctx,
+        main(
+            createForm(
+                Optional.empty(), HttpMethod.POST, "/products", StateService.created("products"))));
   }
 
   public static Context updateForm(@NotNull Context ctx) {
@@ -28,15 +32,18 @@ public class ProductController {
     } else {
       return render(
           ctx,
-          main(createForm(product, "/products/update/" + id, StateService.get("products", id))));
+          main(
+              createForm(
+                  product, HttpMethod.PUT, "/products/" + id, StateService.get("products", id))));
     }
   }
 
-  private static DomContent createForm(
-      Optional<Product> product, String dataAction, String dataSuccess) {
+  public static DomContent createForm(
+      Optional<Product> product, HttpMethod method, String dataAction, String dataSuccess) {
     List<String> fields = getFieldNames(Product.class);
     return form()
         .attr("data-action", dataAction)
+        .attr("data-method", method.asString())
         .attr("data-success", dataSuccess)
         .with(
             each(
@@ -95,7 +102,8 @@ public class ProductController {
                   a("Edit")
                       .attr("onclick", StateService.edit("products", product.get().id.toString())),
                   form()
-                      .attr("data-action", "/products/delete")
+                      .attr("data-action", "/products")
+                      .attr("data-method", HttpMethod.DELETE)
                       .attr("data-success", StateService.list("products"))
                       .with(
                           input().isHidden().withName("id").withValue(product.get().id.toString()),
@@ -122,7 +130,7 @@ public class ProductController {
 
   public static void delete(@NotNull Context ctx) {
     String id = ctx.bodyAsClass(IdReq.class).id;
-    Optional<Product> product = Db.findById(Product.class, id);
+    Optional<Product> product = Db.findById(Product.class, new BigInteger(id));
     if (product.isEmpty()) {
       ctx.status(404);
     } else {
