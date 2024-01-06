@@ -4,7 +4,8 @@ import app.models.Product;
 import web.utils.CrudViewHandler;
 import web.utils.ValidationHelper;
 
-public class ProductController implements CrudViewHandler {
+public class ProductController extends CrudViewHandler {
+
   @Override
   public Class getModelClass() {
     return Product.class;

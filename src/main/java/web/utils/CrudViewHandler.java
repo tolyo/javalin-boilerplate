@@ -13,11 +13,17 @@ import java.util.List;
 import java.util.Optional;
 import org.eclipse.jetty.http.HttpMethod;
 import org.jetbrains.annotations.NotNull;
+import web.Routes;
 import web.layout.Layout;
 
-public interface CrudViewHandler<T extends Model> extends CrudHandler {
+public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
+
+  public CrudViewHandler() {
+    Routes.spaRoutes.add(new UiRouterMapping(this.getName(), this.getPath(), this.getServerPath()));
+  }
+
   @Override
-  default void create(@NotNull Context ctx) {
+  public void create(@NotNull Context ctx) {
     String res = Db.create(getCreateValidator(ctx.body()).validate());
     IdReq resBody = new IdReq();
     resBody.id = res;
@@ -25,7 +31,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   }
 
   @Override
-  default void delete(@NotNull Context ctx, @NotNull String id) {
+  public void delete(@NotNull Context ctx, @NotNull String id) {
     Optional<T> product = Db.findById(getModelClass(), new BigInteger(id));
     if (product.isEmpty()) {
       ctx.status(404);
@@ -36,7 +42,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   }
 
   @Override
-  default void getAll(@NotNull Context ctx) {
+  public void getAll(@NotNull Context ctx) {
     List<T> items = Db.queryList(getModelClass());
     List<String> fields = getFieldNames(getModelClass());
 
@@ -60,7 +66,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   }
 
   @Override
-  default void getOne(@NotNull Context ctx, @NotNull String id) {
+  public void getOne(@NotNull Context ctx, @NotNull String id) {
     Optional<T> item = Db.findById(getModelClass(), new BigInteger(id));
     if (item.isEmpty()) {
       view(ctx, div("Not found"));
@@ -84,13 +90,13 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
   ;
 
   @Override
-  default void update(@NotNull Context ctx, @NotNull String id) {
+  public void update(@NotNull Context ctx, @NotNull String id) {
     Db.update(id, getUpdateValidator(ctx.body()).validate());
     ctx.json("").status(204);
   }
   ;
 
-  default void newForm(@NotNull Context ctx) {
+  public void newForm(@NotNull Context ctx) {
     view(
         ctx,
         main(
@@ -101,7 +107,7 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
                 StateService.created(getName()))));
   }
 
-  default void updateForm(@NotNull Context ctx, @NotNull String id) {
+  public void updateForm(@NotNull Context ctx, @NotNull String id) {
     Optional item = Db.findById(getModelClass(), new BigInteger(id));
     if (item.isEmpty()) {
       view(ctx, div("Not found"));
@@ -140,28 +146,31 @@ public interface CrudViewHandler<T extends Model> extends CrudHandler {
             button("Submit").withType("submit"));
   }
 
-  default void get(@NotNull Context ctx) {
+  public void get(@NotNull Context ctx) {
     Layout.get(ctx);
   }
 
-  Class<T> getModelClass();
+  public abstract Class<T> getModelClass();
 
-  ValidationHelper getCreateValidator(String body);
+  public abstract ValidationHelper getCreateValidator(String body);
 
-  default ValidationHelper getUpdateValidator(String body) {
+  public ValidationHelper getUpdateValidator(String body) {
     return getCreateValidator(body);
   }
 
-  default String getPath() {
+  public String getPath() {
     return "/" + getName();
   }
-  ;
 
-  default String getName() {
+  public String getServerPath() {
+    return "/_" + getName();
+  }
+
+  public String getName() {
     return Db.getTableName(getModelClass());
   }
 
-  static void view(Context ctx, DomContent dc) {
+  public static void view(Context ctx, DomContent dc) {
     ctx.html(dc.render());
   }
 }
