@@ -51,7 +51,12 @@ public class CrudViewApiBuilder extends ApiBuilder {
             "/_" + crudHandler.getPath().substring(1) + "/edit/{id}",
             ctx -> crudHandler.updateForm(ctx, ctx.pathParam(resourceId)),
             roles);
-    staticInstance()
-        .get(publicPath.replace(resourceId, "") + "/**", ctx -> crudHandler.get(ctx), roles);
+
+    String catchAllPath =
+        publicPath
+                .replace(resourceId, "")
+                .substring(0, publicPath.replace(resourceId, "").length() - 1)
+            + "**";
+    staticInstance().get(catchAllPath, ctx -> crudHandler.get(ctx), roles);
   }
 }
