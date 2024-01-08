@@ -19,7 +19,8 @@ import web.layout.Layout;
 public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
 
   public CrudViewHandler() {
-    Routes.spaRoutes.add(new UiRouterMapping(this.getName(), this.getPath(), this.getServerPath()));
+    Routes.crudRoutes.add(
+        new UiRouterMapping(this.getName(), this.getPath(), this.getServerPath()));
   }
 
   @Override

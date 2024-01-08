@@ -6,6 +6,7 @@ import j2html.tags.DomContent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ViewHelpers {
 
@@ -27,5 +28,10 @@ public class ViewHelpers {
     } catch (IllegalAccessException | NoSuchFieldException e) {
       return "";
     }
+  }
+
+  public static String capitalize(String name) {
+    return name.substring(0, 1).toUpperCase(Locale.getDefault())
+        + name.substring(1).toLowerCase(Locale.getDefault());
   }
 }

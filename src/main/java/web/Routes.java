@@ -23,6 +23,7 @@ import web.utils.UiRouterMapping;
 public class Routes {
   public static ArrayList<RouteMapping> routes = new ArrayList();
   public static ArrayList<UiRouterMapping> spaRoutes = new ArrayList<>();
+  public static ArrayList<UiRouterMapping> crudRoutes = new ArrayList<>();
   static RouteMapping[] mappings = {
     new RouteMapping(GET, "", Layout::get), // root component
     new RouteMapping(GET, HomeController.HOME, HomeController::home),
@@ -47,7 +48,7 @@ public class Routes {
                 javalin.routes(
                     () -> {
                       CrudViewApiBuilder.crudViews(crudViewHandler);
-                      new RouteMapping(GET, crudViewHandler.getPath(), ctx -> ctx.html("Dummy"));
+                      ;
                     }));
 
     javalin.exception(

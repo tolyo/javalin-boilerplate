@@ -8,6 +8,7 @@ declare global {
     Alpine: Alpine;
     router: UIRouter;
     routes: RouteConfig[];
+    crudRoutes: RouteConfig[];
     stateService: StateService;
     EventBus: EventTarget;
     FormControllers: Array<FormController>;

@@ -39,9 +39,10 @@ public class Layout {
             .attr("content", "width=device-width, initial-scale=1, shrink-to-fit=no"),
         meta().attr("name", "google").attr("content", "notranslate"),
         link().attr("rel", "stylesheet").attr("href", "/public/web/app.css"),
-        each(libs(), s -> script().withSrc(s)),
+        each(libs(), s -> script().withSrc(s).isDefer()),
         // Define ui-router routes
-        script("window.routes = " + convertToJsonArray(Routes.spaRoutes)));
+        script("window.routes = " + convertToJsonArray(Routes.spaRoutes)),
+        script("window.crudRoutes = " + convertToJsonArray(Routes.crudRoutes)));
   }
 
   public static DomContent header() {

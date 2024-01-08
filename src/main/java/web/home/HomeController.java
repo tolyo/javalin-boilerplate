@@ -38,7 +38,13 @@ public class HomeController {
                                         && !routeMapping.isUiRoute()
                                         && routeMapping.method == HandlerType.GET),
                             routeMapping ->
-                                li(a(routeMapping.defaultName()).withHref(routeMapping.url))))));
+                                li(a(routeMapping.defaultName()).withHref(routeMapping.url))),
+                        each(
+                            Routes.crudRoutes,
+                            routeMapping ->
+                                li(
+                                    a(routeMapping.getControllerName())
+                                        .withHref(routeMapping.url))))));
   }
 
   public static Context subview(Context ctx) {

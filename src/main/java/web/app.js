@@ -1,4 +1,4 @@
-import { initRouter } from "./utils/router.js";
+import { generateRouteConfig, initRouter } from "./utils/router.js";
 
 import "./utils/components.js";
 import FormController from "./utils/form-controller.js";
@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelectorAll("form")
     .forEach((form) => window.FormControllers.push(new FormController(form)));
 });
+
+window.crudRoutes.forEach((r) =>
+  generateRouteConfig(r.name).forEach((v) => window.routes.push(v)),
+);
 
 /**
  * Enable router if `ui-view` tag is present. Otherwise, fallback to default

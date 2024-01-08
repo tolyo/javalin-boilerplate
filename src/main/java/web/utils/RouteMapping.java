@@ -1,8 +1,9 @@
 package web.utils;
 
+import static web.utils.ViewHelpers.capitalize;
+
 import io.javalin.http.Handler;
 import io.javalin.http.HandlerType;
-import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
 import web.Routes;
 
@@ -34,9 +35,7 @@ public class RouteMapping {
   public String defaultName() {
     String[] split = this.url.split("/");
     String name = split[split.length - 1];
-    return name.substring(0, 1).toUpperCase(Locale.getDefault())
-        + name.substring(1).toLowerCase(Locale.getDefault())
-        + "Controller";
+    return capitalize(name) + "Controller";
   }
 
   public boolean isUiRoute() {
