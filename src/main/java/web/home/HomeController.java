@@ -23,28 +23,31 @@ public class HomeController {
         div()
             .attr("id", "home")
             .with(
-                h1("Javalin Boilerplate"),
-                div("A starter template"),
-                partial(SUBVIEW.serverPath),
-                section(
-                    a("Demo").withHref(DemoController.URL), a("Docs").withHref(DocsController.URL)),
-                h6("Available controllers:"),
-                ul().with(
-                        each(
-                            filter(
-                                Routes.routes,
+                main(
+                    h1("Javalin Boilerplate"),
+                    div("A starter template"),
+                    partial(SUBVIEW.serverPath),
+                    section(
+                        a("Demo").withHref(DemoController.URL),
+                        a("Docs").withHref(DocsController.URL))),
+                aside(
+                    h6("Available controllers:"),
+                    ul().with(
+                            each(
+                                filter(
+                                    Routes.routes,
+                                    routeMapping ->
+                                        !"".equals(routeMapping.url)
+                                            && !routeMapping.isUiRoute()
+                                            && routeMapping.method == HandlerType.GET),
                                 routeMapping ->
-                                    !"".equals(routeMapping.url)
-                                        && !routeMapping.isUiRoute()
-                                        && routeMapping.method == HandlerType.GET),
-                            routeMapping ->
-                                li(a(routeMapping.defaultName()).withHref(routeMapping.url))),
-                        each(
-                            Routes.crudRoutes,
-                            routeMapping ->
-                                li(
-                                    a(routeMapping.getControllerName())
-                                        .withHref(routeMapping.url))))));
+                                    li(a(routeMapping.defaultName()).withHref(routeMapping.url))),
+                            each(
+                                Routes.crudRoutes,
+                                routeMapping ->
+                                    li(
+                                        a(routeMapping.getControllerName())
+                                            .withHref(routeMapping.url)))))));
   }
 
   public static Context subview(Context ctx) {
