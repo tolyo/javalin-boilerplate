@@ -40,7 +40,7 @@ tasks {
 }
 
 // Frontend updates
-task copyFrontendFiles(type: Copy) {
+tasks.register('copyFrontendFiles', Copy) {
     from 'src/main/java' // Source directory containing your custom files
     into 'build/classes/java/main' // Destination directory
     include '**/*.html', '**/*.css', '**/*.js', '**/cdn-libs.json' // Include specific file extensions

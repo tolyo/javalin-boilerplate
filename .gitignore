@@ -2,5 +2,6 @@
 .gradle
 .idea
 # Ignore Gradle build output directory
+bin
 build
 **/node_modules

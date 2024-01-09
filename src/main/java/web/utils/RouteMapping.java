@@ -39,6 +39,6 @@ public class RouteMapping {
   }
 
   public boolean isUiRoute() {
-    return this.uiRoute == true;
+    return this.uiRoute;
   }
 }
