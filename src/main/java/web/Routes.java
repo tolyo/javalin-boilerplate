@@ -21,10 +21,10 @@ import web.utils.RouteMapping;
 import web.utils.UiRouterMapping;
 
 public class Routes {
-  public static ArrayList<RouteMapping> routes = new ArrayList();
-  public static ArrayList<UiRouterMapping> spaRoutes = new ArrayList<>();
-  public static ArrayList<UiRouterMapping> crudRoutes = new ArrayList<>();
-  static RouteMapping[] mappings = {
+  public static final ArrayList<RouteMapping> routes = new ArrayList();
+  public static final ArrayList<UiRouterMapping> spaRoutes = new ArrayList<>();
+  public static final ArrayList<UiRouterMapping> crudRoutes = new ArrayList<>();
+  static final RouteMapping[] mappings = {
     new RouteMapping(GET, "", Layout::get), // root component
     new RouteMapping(GET, HomeController.HOME, HomeController::home),
     new RouteMapping(GET, HomeController.SUBVIEW, HomeController::subview),
@@ -34,7 +34,7 @@ public class Routes {
     new RouteMapping(POST, CalculatorController.URL, CalculatorController::post)
   };
 
-  static CrudViewHandler[] crudHandlers = {new ProductController()};
+  static final CrudViewHandler[] crudHandlers = {new ProductController()};
 
   public static Javalin init(Javalin javalin) {
     List.of(mappings)

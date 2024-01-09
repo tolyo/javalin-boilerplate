@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import web.Routes;
 
 public class RouteMapping {
-  public HandlerType method;
-  public String url;
-  public Handler handler;
+  public final HandlerType method;
+  public final String url;
+  public final Handler handler;
   boolean uiRoute = false;
 
   public RouteMapping(@NotNull HandlerType method, @NotNull String url, @NotNull Handler handler) {

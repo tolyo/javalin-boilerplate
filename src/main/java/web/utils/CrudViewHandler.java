@@ -109,7 +109,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
   }
 
   public void updateForm(@NotNull Context ctx, @NotNull String id) {
-    Optional item = Db.findById(getModelClass(), new BigInteger(id));
+    Optional<T> item = Db.findById(getModelClass(), new BigInteger(id));
     if (item.isEmpty()) {
       view(ctx, div("Not found"));
     } else {

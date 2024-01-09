@@ -13,7 +13,7 @@ public abstract class ValidationHelper<T> extends BodyValidator {
     super(body, clazz, new JavalinJackson());
   }
 
-  public static String NULL_NOT_EMPTY_MESSAGE = "Cannot be empty";
+  public static final String NULL_NOT_EMPTY_MESSAGE = "Cannot be empty";
 
   @NotNull
   public static Function1<Object, Boolean> notNullOrEmpty(@NotNull String field) {

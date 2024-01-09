@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.jetbrains.annotations.NotNull;
 
 public class Db {
   private static Connection conn;
@@ -46,7 +47,7 @@ public class Db {
    *     Optional otherwise.
    * @throws RuntimeException If a database access error occurs.
    */
-  public static <T> Optional<T> queryVal(Class<T> type, String query, Object... args) {
+  public static <T> Optional<T> queryVal(Class<T> type, @NotNull String query, Object... args) {
     try (PreparedStatement statement = conn.prepareStatement(query)) {
       setParameters(statement, args);
       try (ResultSet resultSet = statement.executeQuery()) {
