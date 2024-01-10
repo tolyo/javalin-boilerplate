@@ -63,6 +63,10 @@ test:
 functional-test:
 	$(FRONTEND_CONTEXT) test
 	@fuser -k 4000/tcp # todo: remove port
+	@make db-rebuild
+
+functional-test-ui:
+	$(FRONTEND_CONTEXT) test-ui
 
 quality:
 	@make lint

@@ -20,6 +20,11 @@ check:
 	@echo $(INFO) "Typechecking Js"
 	@npm run typecheck
 
+PLAYWRIGHT_TEST := npx playwright test
+
 test:
 	@echo $(INFO) "Playwright test JS"
-	@npx playwright test
+	@$(PLAYWRIGHT_TEST) 
+
+test-ui:
+	@$(PLAYWRIGHT_TEST) --ui	
