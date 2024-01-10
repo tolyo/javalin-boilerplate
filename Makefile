@@ -61,9 +61,8 @@ test:
 	$(SERVER_CONTEXT) test
 
 functional-test:
-	$(SERVER_CONTEXT) functional-test &
 	$(FRONTEND_CONTEXT) test
-	@kill -9 $$(lsof -t -i :4000) # todo: remove port
+	@fuser -k 4000/tcp # todo: remove port
 
 quality:
 	@make lint

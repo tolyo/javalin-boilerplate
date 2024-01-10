@@ -22,4 +22,4 @@ check:
 
 test:
 	@echo $(INFO) "Playwright test JS"
-	@npm run playwright
+	@npx playwright test
