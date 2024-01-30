@@ -114,11 +114,11 @@ public class Db {
     }
   }
 
-  public static Optional<Integer> getCount(Connection conn, String tableName) throws SQLException {
+  public static Optional<Integer> getCount(Connection conn, String tableName) {
     return queryVal(Integer.class, "SELECT COUNT(*) FROM " + tableName);
   }
 
-  public static void deleteAll(Connection conn, String tableName) {
+  public static void deleteAll(String tableName) {
     try (PreparedStatement statement = conn.prepareStatement("DELETE FROM " + tableName)) {
       statement.executeUpdate();
     } catch (SQLException e) {
@@ -142,7 +142,7 @@ public class Db {
               .toArray(Field[]::new);
       String query =
           String.format(
-              "INSERT INTO %s (%s) VALUES (%s) RETURNING ID",
+              "INSERT INTO %s (%s) VALUES (%s) RETURNING id",
               tableName,
               Arrays.stream(fields)
                   .map(x -> toSnakeCase(x.getName()))
@@ -214,7 +214,7 @@ public class Db {
     }
   }
 
-  public static boolean delete(String tableName, String id) {
+  public static boolean delete(@NotNull String tableName, @NotNull String id) {
     return Db.execute("DELETE FROM " + tableName + " WHERE id = ?", new BigInteger(id));
   }
 

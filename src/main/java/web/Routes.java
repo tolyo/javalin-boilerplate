@@ -48,7 +48,6 @@ public class Routes {
                 javalin.routes(
                     () -> {
                       CrudViewApiBuilder.crudViews(crudViewHandler);
-                      ;
                     }));
 
     javalin.exception(

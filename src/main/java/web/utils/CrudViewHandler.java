@@ -125,7 +125,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
   }
 
   private DomContent createForm(
-      Optional item, HttpMethod method, String dataAction, String dataSuccess) {
+      Optional<T> item, HttpMethod method, String dataAction, String dataSuccess) {
     List<String> fields = getFieldNames(getModelClass());
     return form()
         .attr("data-action", dataAction)
@@ -137,13 +137,12 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
                 f ->
                     label(f)
                         .with(
-                            (DomContent)
-                                item.map(
-                                        p ->
-                                            input()
-                                                .withName(f)
-                                                .withValue(getFieldValue(p, f).toString()))
-                                    .orElse(input().withName(f)))),
+                            item.map(
+                                    p ->
+                                        input()
+                                            .withName(f)
+                                            .withValue(getFieldValue(p, f).toString()))
+                                .orElse(input().withName(f)))),
             button("Submit").withType("submit"));
   }
 
