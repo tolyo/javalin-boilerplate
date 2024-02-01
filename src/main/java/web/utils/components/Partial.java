@@ -8,7 +8,7 @@ public class Partial extends ContainerTag<Partial> {
   private static final Random rand = new Random();
 
   public Partial(@NotNull String url) {
-    super("partial-component");
+    super("server-page");
     this.attr("id", String.valueOf(rand.nextInt(1000)));
     this.withData("url", url);
   }
