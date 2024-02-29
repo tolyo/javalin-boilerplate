@@ -22,5 +22,8 @@
     "server-page-component": "latest",
     "typescript": "latest",
     "web": "^0.0.2"
+  },
+  "dependencies": {
+    "pollen-css": "^4.6.2"
   }
 }

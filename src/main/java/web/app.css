@@ -12,7 +12,7 @@
 
 /* Modern Normalize for consistent baseline styles */
 @import "https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css";
-
+@import "./node_modules/pollen-css/pollen.css";
 /* Pollen css vars */
 @import "https://unpkg.com/pollen-css";
 
