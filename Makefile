@@ -20,7 +20,7 @@ setup:
 	$(FRONTEND_CONTEXT) setup
 	$(SERVER_CONTEXT) setup
 	@echo $(INFO) "Complete. Run 'make start' to start server"
-	
+
 compile:
 	$(SERVER_CONTEXT) compile
 

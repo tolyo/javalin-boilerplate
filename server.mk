@@ -3,7 +3,6 @@ setup:
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 	@echo $(INFO) "Make sure to op project..."
 
-
 start:
 	watchexec -r -w src/main \
 		--exts java \

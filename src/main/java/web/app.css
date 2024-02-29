@@ -13,10 +13,12 @@
 /* Modern Normalize for consistent baseline styles */
 @import "https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css";
 
+/* Pollen css vars */
+@import "https://unpkg.com/pollen-css";
+
 /* Default styles */
 @import "./theme/fonts.css";
 @import "./theme/color.css";
-@import "./theme/typography.css";
 
 /* HTMl element styles */
 @import "./theme/styles/anchor.css";
