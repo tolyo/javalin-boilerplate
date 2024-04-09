@@ -3,7 +3,7 @@ button {
   color: white;
   background-color: var(--theme-500);
   border: none;
-  padding: var(--scale-neg-3) var(--scale-0);
+  padding: var(--size-2) var(--scale-0);
   border-radius: var(--radius-sm);
   cursor: pointer;
 

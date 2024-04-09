@@ -14,15 +14,16 @@ public class CalculatorController {
     return render(
         ctx,
         Layout.layout(
-            div(
-                form()
-                    .attr("data-action", URL)
-                    .attr("data-update", "#myDiv")
-                    .attr("data-onchange", "true")
-                    .with(
-                        label(input().withName("value1").withType("number").withValue("0")),
-                        label(input().withName("value2").withType("number").withValue("0"))),
-                div(attrs("#myDiv")))));
+            div(attrs("#calculator"))
+                .with(
+                    form()
+                        .attr("data-action", URL)
+                        .attr("data-update", "#myDiv")
+                        .attr("data-onchange", "true")
+                        .with(
+                            label(input().withName("value1").withType("number").withValue("0")),
+                            label(input().withName("value2").withType("number").withValue("0"))),
+                    div(attrs("#myDiv")))));
   }
 
   public static Context post(Context ctx) {

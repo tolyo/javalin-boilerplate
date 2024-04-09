@@ -23,11 +23,17 @@ export default class FormController {
      */
     this.form = form;
 
-    this.reactive = false;
-
     if (!this.form) {
       throw new Error("Form required");
     }
+
+    /**
+     * @type {Element[]} - collection of form elements
+     */
+    this.elements = Array.from(this.form.elements);
+
+    this.reactive = false;
+
 
     // Prevent the form from submitting and call the submit() method instead
     this.form.addEventListener("submit", (ev) => {
@@ -46,7 +52,7 @@ export default class FormController {
     this.dataModel = {};
 
     // Loop through form elements to handle input and select fields
-    Array.from(this.form.elements).forEach((i) => {
+    this.elements.forEach((i) => {
       // Input handler
       if (i instanceof HTMLInputElement) {
         if (i.name === "_csrf_token") {
@@ -82,7 +88,7 @@ export default class FormController {
    */
   clearAllMessages() {
     // Remove invalid states from inputs
-    Array.from(this.form.elements).forEach((e) =>
+    this.elements.forEach((e) =>
       e.removeAttribute("aria-invalid"),
     );
     // Remove spans with error messages
@@ -99,7 +105,16 @@ export default class FormController {
   submit() {
     this.clearAllMessages();
     const { action, method } = this.form.dataset;
-    Array.from(this.form.elements).forEach((i) => i.dispatchEvent(inputEvent));
+    this.elements.forEach((i) => {
+      // Input handler
+      if (i instanceof HTMLInputElement) {
+        this.dataModel[i.name] = i.value;
+      }
+      // Select handler
+      if (i instanceof HTMLSelectElement) {
+        this.dataModel[i.name] = i.value;
+      }
+    });
     fetch(action, this.maybeAttachBody(method || "POST")).then((res) => {
       if (res.status < 300 && res.status >= 200) {
         this.onSuccess(res);

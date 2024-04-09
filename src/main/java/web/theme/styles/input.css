@@ -1,7 +1,7 @@
 input {
-  padding: var(--scale-neg-3);
+  padding: var(--size-2);
   border: 1px solid var(--gray-400);
-  border-radius: var(--scale-neg-6);
+  border-radius: var(--radius-xs);
   outline: none;
 }
 
@@ -10,7 +10,7 @@ input:focus {
 }
 
 input[aria-invalid="true"] {
-  margin-bottom: var(--scale-neg-6);
+  margin-bottom: var(--size-2);
   border: 1px solid var(--red-400);
   & + span {
     color: var(--red-500);

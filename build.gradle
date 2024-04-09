@@ -47,6 +47,8 @@ tasks.register('copyFrontendFiles', Copy) {
     exclude '**/node_modules', "**/playwright-report", "**/test-results", '**/.eslintrc.js', '**/playwright.config.js'
 }
 
+compileTestJava.dependsOn copyFrontendFiles
+
 run.dependsOn copyFrontendFiles
 build.dependsOn copyFrontendFiles
 jar.dependsOn copyFrontendFiles

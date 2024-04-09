@@ -10,41 +10,41 @@ h6 {
 }
 
 h1 {
-  font-size: var(--scale-5);
+  font-size: var(--size-8);
   margin-bottom: var(--scale-2);
   font-weight: var(--weight-bold);
 }
 
 h2 {
-  font-size: var(--scale-4);
-  margin-bottom: var(--scale-neg-1);
+  font-size: var(--letter-lg);
+  margin-bottom: var(--size-2);
   font-weight: var(--weight-semibold);
 }
 
 h3 {
-  font-size: var(--scale-3);
+  font-size: var(--letter-sm);
   margin-bottom: var(--scale-0);
   font-weight: var(--weight-medium);
   color: var(--gray-900);
 }
 
 h4 {
-  font-size: var(--scale-2);
-  margin-bottom: var(--scale-neg-1);
+  font-size: var(--letter-sm);
+  margin-bottom: var(--size-1);
   font-weight: var(--weight-medium);
   color: var(--gray-900);
 }
 
 h5 {
   font-size: var(--scale-1);
-  margin-bottom: var(--scale-neg-2);
+  margin-bottom: var(--size-2);
   font-weight: var(--weight-medium);
   color: var(--gray-800);
 }
 
 h6 {
-  font-size: var(--scale-neg-1);
-  margin-bottom: var(--scale-neg-4);
+  font-size: var(--letter-xs);
+  margin-bottom: var(--size-2);
   font-weight: var(--weight-light);
   color: var(--gray-700);
 }
