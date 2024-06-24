@@ -28,4 +28,11 @@ public class Product implements Model {
   public String getId() {
     return id.toString();
   }
+
+  @Override
+  public String getBaseQuery() {
+    return """
+      SELECT id, title, amount, price FROM products
+    """;
+  }
 }

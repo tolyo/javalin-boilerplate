@@ -8,9 +8,8 @@ start:
 		--exts java \
 		-i '**/java/web/node_modules/**/*' \
 		--  ./gradlew run & \
-	watchexec -r -w src/main \
+	watchexec -r -w src/main/main/java/web \
     		--exts js,css,html \
-    		-i '**/java/app/**/*' \
     		-i '**/java/web/node_modules/**/*' \
     		--  ./gradlew task copyFrontendFiles
 lint:

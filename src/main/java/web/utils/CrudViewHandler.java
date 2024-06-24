@@ -33,7 +33,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
 
   @Override
   public void delete(@NotNull Context ctx, @NotNull String id) {
-    Optional<T> product = Db.findById(getModelClass(), new BigInteger(id));
+    Optional<T> product = (Optional<T>) Db.findById(getModelClass(), new BigInteger(id));
     if (product.isEmpty()) {
       ctx.status(404);
     } else {
@@ -44,7 +44,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
 
   @Override
   public void getAll(@NotNull Context ctx) {
-    List<T> items = Db.queryList(getModelClass());
+    List<T> items = (List<T>) Db.queryList(getModelClass());
     List<String> fields = getFieldNames(getModelClass());
 
     view(
@@ -68,7 +68,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
 
   @Override
   public void getOne(@NotNull Context ctx, @NotNull String id) {
-    Optional<T> item = Db.findById(getModelClass(), new BigInteger(id));
+    Optional<T> item = (Optional<T>) Db.findById(getModelClass(), new BigInteger(id));
     if (item.isEmpty()) {
       view(ctx, div("Not found"));
     } else {
@@ -88,14 +88,12 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
                       .with(button("Delete").withClass("secondary")))));
     }
   }
-  ;
 
   @Override
   public void update(@NotNull Context ctx, @NotNull String id) {
     Db.update(id, getUpdateValidator(ctx.body()).validate());
     ctx.json("").status(204);
   }
-  ;
 
   public void newForm(@NotNull Context ctx) {
     view(
@@ -109,7 +107,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
   }
 
   public void updateForm(@NotNull Context ctx, @NotNull String id) {
-    Optional<T> item = Db.findById(getModelClass(), new BigInteger(id));
+    Optional<T> item = (Optional<T>) Db.findById(getModelClass(), new BigInteger(id));
     if (item.isEmpty()) {
       view(ctx, div("Not found"));
     } else {
@@ -150,7 +148,7 @@ public abstract class CrudViewHandler<T extends Model> implements CrudHandler {
     Layout.get(ctx);
   }
 
-  public abstract Class<T> getModelClass();
+  public abstract Class<? extends Model> getModelClass();
 
   public abstract ValidationHelper getCreateValidator(String body);
 

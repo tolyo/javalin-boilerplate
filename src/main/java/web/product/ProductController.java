@@ -4,6 +4,7 @@ import app.models.Product;
 import web.utils.CrudViewHandler;
 import web.utils.ValidationHelper;
 
+@SuppressWarnings("rawtypes")
 public class ProductController extends CrudViewHandler {
 
   @Override

@@ -1,9 +1,3 @@
-// Create an empty input event
-const inputEvent = new Event("input", {
-  bubbles: true,
-  cancelable: true,
-});
-
 /**
  * Default controller for working with forms. Initiated by default for all forms
  * on document load.
@@ -33,7 +27,6 @@ export default class FormController {
     this.elements = Array.from(this.form.elements);
 
     this.reactive = false;
-
 
     // Prevent the form from submitting and call the submit() method instead
     this.form.addEventListener("submit", (ev) => {
@@ -88,9 +81,7 @@ export default class FormController {
    */
   clearAllMessages() {
     // Remove invalid states from inputs
-    this.elements.forEach((e) =>
-      e.removeAttribute("aria-invalid"),
-    );
+    this.elements.forEach((e) => e.removeAttribute("aria-invalid"));
     // Remove spans with error messages
     this.form.querySelectorAll("span.error").forEach((x) => x.remove());
     // Remove error class from labels

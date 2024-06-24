@@ -8,9 +8,7 @@ import io.javalin.http.Context;
 import j2html.tags.DomContent;
 import j2html.tags.specialized.FooterTag;
 import j2html.tags.specialized.HtmlTag;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import web.Routes;
@@ -18,6 +16,15 @@ import web.utils.UiRouterMapping;
 import web.utils.components.UiView;
 
 public class Layout {
+
+  /**
+   * CDN libs to be loaded into the header of our main layout
+   */
+  private static final List<String> ULR_LIBS =
+      Arrays.asList(
+          "https://unpkg.com/alpinejs@3.13.1/dist/cdn.min.js",
+          "https://cdn.jsdelivr.net/npm/@uirouter/core@6.1.0/_bundles/ui-router-core.min.js",
+          "https://cdn.jsdelivr.net/npm/server-page-component/dist/server-page.umd.min.js");
 
   public static Context get(Context ctx) {
     return ctx.html(layout().render());
@@ -58,21 +65,7 @@ public class Layout {
   }
 
   public static List<String> libs() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    InputStream inputStream =
-        Layout.class.getClassLoader().getResourceAsStream("web/layout/cdn-libs.json");
-    ArrayList<String> urlList = null;
-    try {
-      urlList = objectMapper.readValue(inputStream, ArrayList.class);
-    } catch (IOException e) {
-      throw new RuntimeException("cdn-libs.json not found in classpath");
-    }
-    try {
-      inputStream.close();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    return urlList;
+    return ULR_LIBS;
   }
 
   private static String convertToJsonArray(List<UiRouterMapping> routeMappings) {
